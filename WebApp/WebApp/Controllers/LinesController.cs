@@ -86,6 +86,8 @@ namespace WebApp.Controllers
                 }
 
                 db_line.Direction = line.Direction;
+                db_line.PointLinePaths.Clear();
+                db_line.PointLinePaths = line.PointLinePaths;
                 unitOfWork.Lines.Update(db_line);
                 unitOfWork.Complete();
             }

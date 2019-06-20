@@ -2,7 +2,7 @@ import { Guid } from "guid-typescript";
 import { Line } from './line';
 
 export class PointPathLine {
-    public Id: Guid;
+    public Id: string;
     public X: number;
     public Y: number;
     public SequenceNumber: number;

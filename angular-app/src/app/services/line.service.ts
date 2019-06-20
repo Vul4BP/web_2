@@ -17,11 +17,15 @@ export class LineService {
   }
 
   public editLine(line: Line, eTag: string): Observable<any>{
-    return this.http.put(`${this.api_route}/${line.Id}`, `Id=${line.Id}&Direction=${line.Direction}`,  { "headers" : {'etag': `${eTag}` , 'Content-type' : 'application/x-www-form-urlencoded'} } );
+    //return this.http.put(`${this.api_route}/${line.Id}`, `Id=${line.Id}&Direction=${line.Direction}`,  { "headers" : {'etag': `${eTag}` , 'Content-type' : 'application/x-www-form-urlencoded'} } );
+    var json = JSON.stringify(line);
+    return this.http.put(`${this.api_route}/${line.Id}`, json ,{ "headers" : {'etag': `${eTag}`, 'Content-type' : 'application/json'}});
   }
 
   public addLine(line: Line): Observable<any>{
-    return this.http.post(`${this.api_route}`, `Id=${line.Id}&Direction=${line.Direction}`,  { "headers" : {'Content-type' : 'application/x-www-form-urlencoded'}} );
+    //return this.http.post(`${this.api_route}`, `Id=${line.Id}&Direction=${line.Direction}`,  { "headers" : {'Content-type' : 'application/x-www-form-urlencoded'}} );
+    var json = JSON.stringify(line);
+    return this.http.post(`${this.api_route}`, json ,{ "headers" : {'Content-type' : 'application/json'}});
   }
 
   public deleteLine(lineId: string) :Observable<any>{

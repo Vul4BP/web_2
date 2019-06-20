@@ -8,6 +8,8 @@ import { LineService } from '../services/line.service';
 import { Bus } from 'src/models/bus';
 import { BusService } from '../services/bus.service';
 import { _MatChipListMixinBase } from '@angular/material';
+import { PointPathLine } from 'src/models/point-path-line';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +27,9 @@ export class HomeComponent implements OnInit {
   prikazaneLinije: Array<any> = new Array<any>(); //lineId => Line objekat
   prikazaniAutobusi: Array<any> = new Array<any>();
   isConnectedWS: Boolean = false;
+
+  putanjaPrikazaneLinijeAdmin: any;
+  prikazanaLinijaAdmin: Line = new Line();
 
   public displayedPanel: string = 'none';
 
@@ -188,13 +193,73 @@ private subscribeForBusPositions () {
       })
   }
 
+  public DrawLineOnMapAdmin(linija: Line){
+    this.RemoveLineFromMapAdmin();
+    
+    let SelectedLineCoordinates = new google.maps.MVCArray([]);
+    
+    let sortiranaPutanja = linija.PointLinePaths.sort((a,b) => a.SequenceNumber - b.SequenceNumber);
+    
+		sortiranaPutanja.forEach((item) => {
+      SelectedLineCoordinates.push(new google.maps.LatLng(item.X,item.Y));	
+		});
+    
+    // let bojaLinije = "#"+linija.Id+linija.Id;
+
+    // if (bojaLinije.length == 5) {
+    //   bojaLinije += "55";
+    // }
+
+		let polyOptions = {
+            path: SelectedLineCoordinates,
+            geodesic: true,
+						strokeColor: '#eda20e',
+						strokeOpacity: 1,
+            strokeWeight: 4,
+            editable: true
+    }
+    
+		this.putanjaPrikazaneLinijeAdmin = new google.maps.Polyline(polyOptions);
+    this.putanjaPrikazaneLinijeAdmin.setMap(this.map);
+    this.prikazanaLinijaAdmin = linija;
+
+    this.removeOverlay();
+  }
+
+  public EditLineSaveChanges(): Array<PointPathLine>{
+    var seqNum = 0;
+    var pointPathLines = new Array<PointPathLine>();
+    this.putanjaPrikazaneLinijeAdmin.getPath().forEach(element => {
+      var point = new PointPathLine();
+      point.Id = Guid.create().toString();
+      point.LineId = this.prikazanaLinijaAdmin.Id;
+      point.X = element.lat();
+      point.Y = element.lng();
+      point.SequenceNumber = ++seqNum;
+      pointPathLines.push(point);
+    });
+    return pointPathLines;
+  }
+
+  public RemoveLineFromMapAdmin() {
+    if (!this.putanjaPrikazaneLinijeAdmin) {
+      return;
+    }
+
+    this.putanjaPrikazaneLinijeAdmin.setMap(null);
+    this.putanjaPrikazaneLinijeAdmin = null;
+    this.prikazanaLinijaAdmin = null;
+
+    this.displayOverlay();
+  }
+
   public DrawLineOnMap(linija: Line) {
     if (linija.Id in this.putanjePrikazanihLinija) {
       console.log("Linija je vec nacrtana");
       return;
     }
 
-		let SelectedLineCoordinates = new Array<google.maps.LatLng>();
+    let SelectedLineCoordinates = new Array<google.maps.LatLng>();
     
     if (linija.PointLinePaths.length == 0) {
       console.log(linija.Id + " nema putanju");
@@ -219,9 +284,8 @@ private subscribeForBusPositions () {
 						strokeColor: bojaLinije,
 						strokeOpacity: 1,
             strokeWeight: 4,
-            //editable: true //za admina
     }
-		
+    
 		this.putanjePrikazanihLinija[linija.Id] = new google.maps.Polyline(polyOptions);
     this.putanjePrikazanihLinija[linija.Id].setMap(this.map);
     this.prikazaneLinije[linija.Id] = linija;
