@@ -3,10 +3,8 @@ import { HomeComponent } from '../home/home.component';
 import { LineService } from '../services/line.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Line } from 'src/models/line';
-import { MatTableDataSource } from '@angular/material';
 import { PointPathLine } from 'src/models/point-path-line';
 import { Guid } from 'guid-typescript';
-import { PointService } from '../services/point.service';
 
 @Component({
   selector: 'app-edit-line',
@@ -24,7 +22,7 @@ export class EditLineComponent implements OnInit, OnDestroy {
   message: string = '';
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent, private _lineService: LineService,
-  private formBuilder: FormBuilder, private _pointService: PointService) { }
+  private formBuilder: FormBuilder) { }
 
   ngOnDestroy(): void {
     this._parent.RemoveLineFromMapAdmin();
@@ -87,7 +85,8 @@ export class EditLineComponent implements OnInit, OnDestroy {
 
     this.line.Id = this.linef.lineId.value;
     this.line.Direction = this.linef.direction.value;
-    this.line.PointLinePaths = this._parent.EditLineSaveChanges();
+    this.line.PointLinePaths = this._parent.EditLineSaveChanges(); 
+    this.line.BusStopsOnLines = this._parent.EditBusStopSaveChanges();
 
     this._lineService.editLine(this.line, this.eTag)
       .subscribe(

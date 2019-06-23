@@ -88,6 +88,8 @@ namespace WebApp.Controllers
                 db_line.Direction = line.Direction;
                 db_line.PointLinePaths.Clear();
                 db_line.PointLinePaths = line.PointLinePaths;
+
+                db_line.BusStopsOnLines.ToList().ForEach(x => ChangeCoordinates(x.BusStop, line.BusStopsOnLines.ToList().FirstOrDefault(y => y.Id == x.Id).BusStop));
                 unitOfWork.Lines.Update(db_line);
                 unitOfWork.Complete();
             }
@@ -183,6 +185,12 @@ namespace WebApp.Controllers
                 }
                 return builder.ToString();
             }
+        }
+
+        private void ChangeCoordinates(BusStop busStop, BusStop newBusStop)
+        {
+            busStop.X = newBusStop.X;
+            busStop.Y = newBusStop.Y;
         }
     }
 }

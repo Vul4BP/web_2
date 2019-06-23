@@ -1,21 +1,21 @@
 <h1>Stanice</h1>
 <button mat-flat-button color="primary" class='matButtonStyle btn-left-w-33' style="margin-left: 10%;" (click)="addBtnClick()">Kreiraj</button>
 <form [formGroup]="getBusStopForm" novalidate style='text-align: center;'>
+  <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-left-w-33' (click)="editBtnClick()">Izmeni</button>
+  <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-right-w-33' (click)="deleteBtnClick()">Obrisi</button>
   <div class="form-group">
     <mat-form-field class="div-full-width">
       <input formControlName='busStopId' matInput placeholder="Stanica" required>
       <mat-error *ngIf="getBusStopForm.controls['busStopId'].errors && getBusStopForm.controls['busStopId'].errors['required']">Obavezno polje</mat-error>
     </mat-form-field>
   </div>
-  <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-left-w-33' (click)="editBtnClick()">Izmeni</button>
-  <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-right-w-33' (click)="deleteBtnClick()">Obrisi</button>
 </form>
-<div *ngIf="busStop || newBusStop"> 
+<div *ngIf="newBusStop"> 
   <mat-form-field class='ticketsFilter'>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
 </div>
-<div *ngIf="busStop || newBusStop" class="points">
+<div *ngIf="newBusStop" class="points">
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="Id">
       <th mat-header-cell *matHeaderCellDef> Linija </th>
@@ -25,7 +25,7 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight': selectedRowIndex == row.Id}" (click)="selectRow(row)"></tr>
   </table>
 </div>
-<div *ngIf="busStop || newBusStop" style="text-align: center">
+<div *ngIf="newBusStop" style="text-align: center">
   <button *ngIf="selectedRowIndex" style="margin-top:10px;" mat-flat-button color="primary" class='matButtonStyle' (click)='deleteLine()'>Skloni liniju</button>
   <form [formGroup]="lineForm" novalidate style='text-align: center;'>     
     <div class="form-group">
@@ -40,16 +40,6 @@
 <div *ngIf="busStop || newBusStop" >
   <form [formGroup]="busStopForm" novalidate style='text-align: center;'>
     <div class="form-group">
-      <mat-form-field class="div-full-width">
-        <input (focusout)='xIsNotNumber()' formControlName='x' matInput placeholder="X" required>
-        <mat-error *ngIf="busStopForm.controls['x'].errors && busStopForm.controls['x'].errors['required']">Obavezno polje</mat-error>
-        <mat-error *ngIf="busStopForm.controls['x'].errors && busStopForm.controls['x'].errors['notnumber']">Mora biti broj</mat-error>
-      </mat-form-field>
-      <mat-form-field class="div-full-width">
-        <input (focusout)='yIsNotNumber()' formControlName='y' matInput placeholder="Y" required>
-        <mat-error *ngIf="busStopForm.controls['y'].errors && busStopForm.controls['y'].errors['required']">Obavezno polje</mat-error>
-        <mat-error *ngIf="busStopForm.controls['y'].errors && busStopForm.controls['y'].errors['notnumber']">Mora biti broj</mat-error>
-      </mat-form-field>
       <mat-form-field class="div-full-width">
         <input formControlName='name' matInput placeholder="Ime" required>
         <mat-error *ngIf="busStopForm.controls['name'].errors && busStopForm.controls['name'].errors['required']">Obavezno polje</mat-error>

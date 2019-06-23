@@ -1,4 +1,5 @@
 <h1>Linije</h1>
+<button mat-flat-button color="primary" class='matButtonStyle btn-left-w-33' style="margin-left: 10%;" (click)="addNewLineBtnClick()">Kreiraj</button>
 <form [formGroup]="getLineForm" novalidate style='text-align: center;'>
   <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-left-w-33' (click)="editLineBtnClick()">Izmeni</button>
   <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-right-w-33' (click)="deleteLine()">Obrisi</button>
@@ -9,7 +10,6 @@
     </mat-form-field>
   </div>
 </form>
-<button mat-flat-button color="primary" class='matButtonStyle btn-left-w-33' style="margin-left: 10%;" (click)="addNewLineBtnClick()">Kreiraj</button>
 <div *ngIf="line || newLine" >
   <form [formGroup]="lineForm" novalidate style='text-align: center;'>
     <div class="form-group">
@@ -24,6 +24,6 @@
     </div>
     <label *ngIf="message!=''" style="color: red;">{{message}}</label>
     <button *ngIf="line" mat-flat-button color="primary" type="submit" name="editbtn" class='matButtonStyle' (click)='editLine()'>Sacuvaj linuju</button>
-    <button *ngIf="newLine" mat-flat-button color="primary" type="submit" name="addbtn" class='matButtonStyle' (click)='addLine()'>Sacuvaj linuju</button>
+    <button *ngIf="newLine" mat-flat-button color="primary" type="submit" name="addbtn" class='matButtonStyle' (click)='addLine()'>Kreiraj linuju</button>
   </form>
 </div>

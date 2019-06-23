@@ -18,17 +18,12 @@ export class EditBusStopComponent implements OnInit {
   getBusStopForm: FormGroup;
   busStopForm: FormGroup;
   lineForm: FormGroup;
-
   busStop: BusStop;
   newBusStop: BusStop;
-
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['Id'];
-
   selectedRowIndex: String;
-
   eTag: string;
-
   message: string = '';
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent, private formBuilder: FormBuilder,
@@ -46,8 +41,6 @@ export class EditBusStopComponent implements OnInit {
     });
 
     this.busStopForm = this.formBuilder.group({
-      x: ['', Validators.required],
-      y: ['', Validators.required],
       name: ['', Validators.required]
     });
   }
@@ -82,9 +75,6 @@ export class EditBusStopComponent implements OnInit {
         data => {
           this.eTag = data.headers.get('etag');
           this.busStop = data.body;
-          this.dataSource = new MatTableDataSource(this.createDataSource(this.busStop.BusStopsOnLines));
-          this.busStopf.x.setValue(this.busStop.X);
-          this.busStopf.y.setValue(this.busStop.Y);
           this.busStopf.name.setValue(this.busStop.Name);
         },
         err => {
@@ -113,131 +103,36 @@ export class EditBusStopComponent implements OnInit {
     this.selectedRowIndex = row.Id;
   }
 
-  xIsNotNumber(){
-    var val = this.busStopf.x.value;
-    if(isNaN(val))
-      this.busStopf.x.setErrors({'notnumber': true});
-  }
-
-  yIsNotNumber(){
-    var val = this.busStopf.y.value;
-    if(isNaN(val))
-      this.busStopf.y.setErrors({'notnumber': true});
-  }
-
   addLine(){
     if(this.lineForm.invalid)
       return;
 
     var busStopOnLine = new BusStopsOnLine();
-    busStopOnLine.Id = Guid.create();
+    busStopOnLine.Id = Guid.create().toString();
     busStopOnLine.LineId = this.linef.lineId.value;
 
-    if(this.busStop){
-      if(this.busStopForm.invalid)
-        return;
+    if(this.newBusStop.BusStopsOnLines.find(x => x.LineId == busStopOnLine.LineId) != null)
+      return;
 
-      if(this.busStop.BusStopsOnLines.find(x => x.LineId == busStopOnLine.LineId) != null)
-        return;
-      
-      busStopOnLine.BusStopId = this.busStop.Id;
-
-      this._busStopService.editBusStop(this.busStop, this.eTag)
-        .subscribe(
-          data => {
-            this._busStopsOnLineService.addBusStopOnLine(busStopOnLine)
-              .subscribe(
-                data => {
-                  this._busStopService.getBusStop(this.busStop.Id)
-                    .subscribe(
-                      data => {
-                        this.eTag = data.headers.get('etag');
-                        this.busStop = data.body;
-                        this.dataSource = new MatTableDataSource(this.createDataSource(this.busStop.BusStopsOnLines));
-                      },
-                      err => {
-                        console.log(err);
-                      }
-                    )
-                },
-                err => {
-                  console.log(err);
-                }
-              )
-          },
-          err => {
-            console.log(err);
-            if(err.status == 412)
-            {
-              this.message = "Neko je vec izvrsio izmene. Osvezite resurs."
-            }
-          }
-        )
-    }
-    else if(this.newBusStop){
-      if(this.newBusStop.BusStopsOnLines.find(x => x.LineId == busStopOnLine.LineId) != null)
-        return;
-
-      this.newBusStop.BusStopsOnLines.push(busStopOnLine);
-      this.dataSource = new MatTableDataSource(this.createDataSource(this.newBusStop.BusStopsOnLines));
-    }
+    this.newBusStop.BusStopsOnLines.push(busStopOnLine);
+    this.dataSource = new MatTableDataSource(this.createDataSource(this.newBusStop.BusStopsOnLines));
   }
 
   deleteLine(){
-    if(this.busStop){
-      // if(this.busStopForm.invalid)
-      //   return;
+    var busStopOnLine = this.newBusStop.BusStopsOnLines.find(x => x.LineId == this.selectedRowIndex);
+    if(busStopOnLine==null)
+      return;
 
-      var busStopOnLine = this.busStop.BusStopsOnLines.find(x => x.LineId == this.selectedRowIndex);
-      this._busStopService.editBusStop(this.busStop, this.eTag)
-        .subscribe(
-          data => {
-            this._busStopsOnLineService.deleteBusStopOnLine(busStopOnLine)
-              .subscribe(
-                data => {
-                  this._busStopService.getBusStop(this.busStop.Id)
-                    .subscribe(
-                      data => {
-                        this.eTag = data.headers.get('etag');
-                        this.busStop = data.body;
-                        this.dataSource = new MatTableDataSource(this.createDataSource(this.busStop.BusStopsOnLines));
-                      },
-                      err => {
-                        console.log(err);
-                      }
-                    )
-                },
-                err => {
-                  console.log(err);
-                }
-              )
-          },
-          err => {
-            console.log(err);
-            if(err.status == 412)
-            {
-              this.message = "Neko je vec izvrsio izmene. Osvezite resurs."
-            }
-          }
-        )
-    }else if(this.newBusStop){
-      var busStopOnLine = this.newBusStop.BusStopsOnLines.find(x => x.LineId == this.selectedRowIndex);
-      if(busStopOnLine==null)
-        return;
-
-      var index = this.newBusStop.BusStopsOnLines.findIndex(x => x.Id == busStopOnLine.Id);
-      this.newBusStop.BusStopsOnLines.splice(index, 1);
-      this.dataSource = new MatTableDataSource(this.createDataSource(this.newBusStop.BusStopsOnLines));
-      this.selectedRowIndex = null;
-    }
+    var index = this.newBusStop.BusStopsOnLines.findIndex(x => x.Id == busStopOnLine.Id);
+    this.newBusStop.BusStopsOnLines.splice(index, 1);
+    this.dataSource = new MatTableDataSource(this.createDataSource(this.newBusStop.BusStopsOnLines));
+    this.selectedRowIndex = null;
   }
 
   editBusStop(){
     if(this.busStopForm.invalid)
       return;
     
-    this.busStop.X = this.busStopf.x.value;
-    this.busStop.Y = this.busStopf.y.value;
     this.busStop.Name = this.busStopf.name.value;
     
     this._busStopService.editBusStop(this.busStop, this.eTag)
@@ -259,9 +154,9 @@ export class EditBusStopComponent implements OnInit {
     if(this.busStopForm.invalid)
       return;
     
-    this.newBusStop.Id = Guid.create();
-    this.newBusStop.X = this.busStopf.x.value;
-    this.newBusStop.Y = this.busStopf.y.value;
+    this.newBusStop.Id = Guid.create().toString();
+    this.newBusStop.X = 45.264007613065196;
+    this.newBusStop.Y = 19.830164978504172;
     this.newBusStop.Name = this.busStopf.name.value;
 
     this.newBusStop.BusStopsOnLines.forEach(element => {
@@ -271,16 +166,6 @@ export class EditBusStopComponent implements OnInit {
     this._busStopService.addBusStop(this.newBusStop)
       .subscribe(
         data => {
-          this.newBusStop.BusStopsOnLines.forEach(element => {
-            this._busStopsOnLineService.addBusStopOnLine(element)
-              .subscribe(
-                data => {
-                },
-                err => {
-                  console.log(err);
-                }
-              )
-          });
           this.newBusStop = null;
         },
         err => {
@@ -294,7 +179,6 @@ export class EditBusStopComponent implements OnInit {
       return;
 
     this.message = '';
-
     var busStopId = this.getBusStopf.busStopId.value;
 
     this._busStopService.deleteBusStop(busStopId)

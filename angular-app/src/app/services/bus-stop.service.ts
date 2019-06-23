@@ -23,7 +23,9 @@ export class BusStopService {
   }
 
   public addBusStop(busStop: BusStop): Observable<any>{
-    return this.http.post(`${this.api_route}`, `Id=${busStop.Id}&X=${busStop.X}&Y=${busStop.Y}&Name=${busStop.Name}`,  { "headers" : {'Content-type' : 'application/x-www-form-urlencoded'}} );
+    var json = JSON.stringify(busStop);
+    console.log(json);
+    return this.http.post(`${this.api_route}`, json ,  { "headers" : {'Content-type' : 'application/json'}} );
   }
 
   public deleteBusStop(busStopId: Guid) :Observable<any>{

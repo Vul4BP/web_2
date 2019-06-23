@@ -10,6 +10,7 @@ import { BusService } from '../services/bus.service';
 import { _MatChipListMixinBase } from '@angular/material';
 import { PointPathLine } from 'src/models/point-path-line';
 import { Guid } from 'guid-typescript';
+import { BusStopsOnLine } from '../../models/bus-stops-on-line';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,9 @@ export class HomeComponent implements OnInit {
 
   putanjaPrikazaneLinijeAdmin: any;
   prikazanaLinijaAdmin: Line = new Line();
+  stanicePrikazaneNaMapiAdmin: Array<any>;
+  duplikatiStanica: Array<any>;
+  busStops: Array<BusStop>;
 
   public displayedPanel: string = 'none';
 
@@ -196,6 +200,7 @@ private subscribeForBusPositions () {
   public DrawLineOnMapAdmin(linija: Line){
     this.RemoveLineFromMapAdmin();
     
+    console.log(linija);
     let SelectedLineCoordinates = new google.maps.MVCArray([]);
     
     let sortiranaPutanja = linija.PointLinePaths.sort((a,b) => a.SequenceNumber - b.SequenceNumber);
@@ -204,12 +209,6 @@ private subscribeForBusPositions () {
       SelectedLineCoordinates.push(new google.maps.LatLng(item.X,item.Y));	
 		});
     
-    // let bojaLinije = "#"+linija.Id+linija.Id;
-
-    // if (bojaLinije.length == 5) {
-    //   bojaLinije += "55";
-    // }
-
 		let polyOptions = {
             path: SelectedLineCoordinates,
             geodesic: true,
@@ -222,6 +221,28 @@ private subscribeForBusPositions () {
 		this.putanjaPrikazaneLinijeAdmin = new google.maps.Polyline(polyOptions);
     this.putanjaPrikazaneLinijeAdmin.setMap(this.map);
     this.prikazanaLinijaAdmin = linija;
+
+    this.busStops = new Array<BusStop>();
+    this.stanicePrikazaneNaMapiAdmin = new Array<any>();
+    this.duplikatiStanica = new Array<any>();
+
+    if (linija.BusStopsOnLines.length > 0) {
+      linija.BusStopsOnLines.forEach((BusStopLineConnection, index) => {
+        if(this.busStops.find(x=> x.X == BusStopLineConnection.BusStop.X && x.Y == BusStopLineConnection.BusStop.Y)==null){
+          this.DrawBusStopOnMapAdmin(BusStopLineConnection.BusStop, linija.Id);
+          var newBusStop = new BusStop();
+          newBusStop.Id = BusStopLineConnection.BusStop.Id;
+          newBusStop.X = BusStopLineConnection.BusStop.X;
+          newBusStop.Y = BusStopLineConnection.BusStop.Y;
+          this.busStops.push(newBusStop);
+        }
+        else{
+          this.duplikatiStanica.push(BusStopLineConnection.BusStop);
+        }
+      });
+    } else {
+      console.log(linija.Id + " nema stanice");
+    }
 
     this.removeOverlay();
   }
@@ -241,10 +262,33 @@ private subscribeForBusPositions () {
     return pointPathLines;
   }
 
+  public EditBusStopSaveChanges(): Array<BusStopsOnLine>{
+    this.stanicePrikazaneNaMapiAdmin.forEach(element => {
+      var busStopId = (element as google.maps.Marker).getTitle();
+      var latLng = (element as google.maps.Marker).getPosition();
+      var busStop = this.busStops.find(x => x.Id.toString() == busStopId)
+      if(busStop == null)
+        return;
+
+      this.prikazanaLinijaAdmin.BusStopsOnLines.forEach(element => {
+        if(element.BusStop.X == busStop.X && element.BusStop.Y == busStop.Y){
+          element.BusStop.X = latLng.lat();
+          element.BusStop.Y = latLng.lng();
+        }
+      });
+    });
+    return this.prikazanaLinijaAdmin.BusStopsOnLines;
+  }
+
   public RemoveLineFromMapAdmin() {
     if (!this.putanjaPrikazaneLinijeAdmin) {
       return;
     }
+
+    this.stanicePrikazaneNaMapiAdmin.forEach(x => x.setMap(null));
+    this.stanicePrikazaneNaMapiAdmin = null;
+    this.duplikatiStanica = null;
+    this.busStops = null;
 
     this.putanjaPrikazaneLinijeAdmin.setMap(null);
     this.putanjaPrikazaneLinijeAdmin = null;
@@ -320,6 +364,28 @@ private subscribeForBusPositions () {
     delete this.prikazaneLinije[lineId]
   }
 
+  public DrawBusStopOnMapAdmin(busStop: BusStop, lineId: string = "") {
+    let markerIconPath = "../../assets/imgs/busStopMarker_mini.png";
+
+    let marker = this.DrawMarkerOnMap(busStop.X, busStop.Y, busStop.Id.toString(), markerIconPath, true);
+    let infoWindow = new google.maps.InfoWindow();
+    marker.addListener('click', () => {
+      let prikaziLinijeHTML = "";
+      let content = "";
+
+      content += `<div><b>${busStop.Name}</b></div>`;
+      content += `<div><b>Lat:</b> ${busStop.X}</div>`;
+      content += `<div><b>Lng:</b> ${busStop.Y}</div>`;
+      content += `<div>${busStop.Id}</div>`;
+      content += `<div>${busStop.Address}</div>
+      ${prikaziLinijeHTML}`;
+      infoWindow.setContent(`${content}`);
+      infoWindow.open(this.map, marker);
+    });
+
+    this.stanicePrikazaneNaMapiAdmin.push(marker);
+  }
+
   public DrawBusStopOnMap(busStop: BusStop, lineId: string = "") {
     let markerIconPath = "../../assets/imgs/busStopMarker_mini.png";
 
@@ -341,8 +407,6 @@ private subscribeForBusPositions () {
       let content = "";
 
       content += `<div><b>${busStop.Name}</b></div>`;
-      if(this._auth.getRole() == "Admin")
-        content += `<div>${busStop.Id}</div>`;
       content += `<div>${busStop.Address}</div>
       ${prikaziLinijeHTML}`;
       infoWindow.setContent(`${content}${timeString}`);
@@ -359,15 +423,22 @@ private subscribeForBusPositions () {
     return infowindow;
   }
 
-  private DrawMarkerOnMap(latX: number, lngY: number, title: string, customIcon:string = ""): google.maps.Marker {
+  private DrawMarkerOnMap(latX: number, lngY: number, title: string, customIcon:string = "", admin: boolean = false): google.maps.Marker {
     let marker = null;
-    if (customIcon.trim().length > 0) {
+    if (customIcon.trim().length > 0 && admin == true) {
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(latX, lngY),
+        map: this.map,
+        title: title,
+        icon: customIcon,
+        draggable: true
+      });
+    } else if (customIcon.trim().length > 0) {
       marker = new google.maps.Marker({
         position: new google.maps.LatLng(latX, lngY),
         map: this.map,
         //title: title,
-        icon: customIcon,
-        //draggable: true //za admina
+        icon: customIcon
       });
     } else {
       marker = new google.maps.Marker({
@@ -376,7 +447,7 @@ private subscribeForBusPositions () {
         title: title
       });
     }
-
+    
     marker.setMap(this.map);
 
     return marker;
@@ -440,12 +511,8 @@ private subscribeForBusPositions () {
     path[len-1] = stationLocation; 
     var polyline = new google.maps.Polyline({
       path: path,
-      // strokeColor: "#ff0000",
-      // strokeOpacity: 0.6,
-      // strokeWeight: 5
     });
     var distance = google.maps.geometry.spherical.computeLength(polyline.getPath());
-    //polyline.setMap(this.map);
     var speedKm_h = 50;
     var speedM_s = speedKm_h*(1000/3600);
     var time = distance/speedM_s;
@@ -504,16 +571,5 @@ private subscribeForBusPositions () {
 
   getPrikazaneLinije(): Array<any>{
     return this.prikazaneLinije;
-  }
-
-  drawPoint(path: google.maps.LatLng[]){
-    var polyline = new google.maps.Polyline({
-      path: path,
-      strokeColor: "#ff0000",
-      strokeOpacity: 1,
-      strokeWeight: 8,
-    });
-    //var distance = google.maps.geometry.spherical.computeLength(polyline.getPath());
-    polyline.setMap(this.map);
   }
 }
