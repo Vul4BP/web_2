@@ -16,7 +16,7 @@ export class CheckTicketComponent implements OnInit {
   ticketId: string = "";
   foundTicket: any;
   message: string = "";
-  isError:boolean = false;
+  messageIsError: boolean = false;
   displayTicketData:boolean = true;
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class CheckTicketComponent implements OnInit {
               this.foundTicket = data2;
             },
             error2 => {
-              this.DisplayMessage(error2.error.Message, true);
+              this.DisplayMessage("Desila se greska", true);
             }
           );
         } else {
@@ -51,7 +51,7 @@ export class CheckTicketComponent implements OnInit {
         }
       },
       error => {
-        this.DisplayMessage(error.error.Message, true);
+        this.DisplayMessage("Desila se greska", true);
       }
     )
   }
@@ -59,11 +59,10 @@ export class CheckTicketComponent implements OnInit {
   DisplayMessage(msg:string, isError:boolean) {
     if (msg == null) {
       this.message = "poruka je null :(";
-      this.isError = true;
+      this.messageIsError = true;
     } else {
       this.message = msg;
-      this.isError = isError;
+      this.messageIsError = isError;
     }
   }
-
 }
