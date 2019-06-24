@@ -144,6 +144,10 @@ export class EditPricelistComponent implements OnInit {
       )
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   setFormData(){
     this.f.from.setValue(new Date(this.pricelist.From));
     this.f.to.setValue(new Date(this.pricelist.To));

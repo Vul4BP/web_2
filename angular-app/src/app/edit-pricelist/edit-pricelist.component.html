@@ -1,6 +1,9 @@
 <div (click)='click()' class="container">
   <h1>Cenovnik</h1>
-  <button mat-flat-button color="primary" type="submit" name="editBtn" class='matButtonStyle btn-left-w-32' (click)="addBtnClick()">Kreiraj novi</button>
+  <button mat-flat-button color="primary" type="submit" name="editBtn" class='matButtonStyle btn-left-w-32' (click)="addBtnClick()">Kreiraj</button>
+  <mat-form-field class='tableFilter'>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
   <div *ngIf="pricelists" class="table-container height-150 margin-top-10">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="Index">

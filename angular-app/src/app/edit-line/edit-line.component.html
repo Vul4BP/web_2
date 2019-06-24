@@ -1,29 +1,31 @@
-<h1>Linije</h1>
-<button mat-flat-button color="primary" class='matButtonStyle btn-left-w-33' style="margin-left: 10%;" (click)="addNewLineBtnClick()">Kreiraj</button>
-<form [formGroup]="getLineForm" novalidate style='text-align: center;'>
-  <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-left-w-33' (click)="editLineBtnClick()">Izmeni</button>
-  <button mat-flat-button color="primary" type="submit" style="margin-top: 10px;" name="editBtn" class='matButtonStyle btn-right-w-33' (click)="deleteLine()">Obrisi</button>
-  <div class="form-group">
-    <mat-form-field class="div-full-width">
-      <input formControlName='lineId' matInput placeholder="Linija" required>
-      <mat-error *ngIf="getLineForm.controls['lineId'].errors && getLineForm.controls['lineId'].errors['required']">Obavezno polje</mat-error>
-    </mat-form-field>
-  </div>
-</form>
-<div *ngIf="line || newLine" >
-  <form [formGroup]="lineForm" novalidate style='text-align: center;'>
+<div class='container' (click)="click()">
+  <h1>Linije</h1>
+  <button mat-flat-button color="primary" class='matButtonStyle btn-left-w-33' (click)="addNewLineBtnClick()">Kreiraj</button>
+  <form [formGroup]="getLineForm" novalidate>
+    <button mat-flat-button color="primary" type="submit" name="editBtn" class='matButtonStyle btn-left-w-33 margin-top-10' (click)="editLineBtnClick()">Izmeni</button>
+    <button mat-flat-button color="primary" type="submit" name="editBtn" class='matButtonStyle btn-right-w-33 margin-top-10' (click)="deleteLine()">Obrisi</button>
     <div class="form-group">
-      <mat-form-field *ngIf="newLine" class="div-full-width">
-        <input formControlName='lineId' matInput placeholder="Linija" required>
-        <mat-error *ngIf="lineForm.controls['lineId'].errors && lineForm.controls['lineId'].errors['required']">Obavezno polje</mat-error>
-      </mat-form-field>
       <mat-form-field class="div-full-width">
-        <input formControlName='direction' matInput placeholder="Naziv" required>
-        <mat-error *ngIf="lineForm.controls['direction'].errors && lineForm.controls['direction'].errors['required']">Obavezno polje</mat-error>
+        <input formControlName='lineId' matInput placeholder="Linija" required>
+        <mat-error *ngIf="getLineForm.controls['lineId'].errors && getLineForm.controls['lineId'].errors['required']">Obavezno polje</mat-error>
       </mat-form-field>
     </div>
-    <label *ngIf="message!=''" style="color: red;">{{message}}</label>
-    <button *ngIf="line" mat-flat-button color="primary" type="submit" name="editbtn" class='matButtonStyle' (click)='editLine()'>Sacuvaj linuju</button>
-    <button *ngIf="newLine" mat-flat-button color="primary" type="submit" name="addbtn" class='matButtonStyle' (click)='addLine()'>Kreiraj linuju</button>
   </form>
+  <div *ngIf="line || newLine">
+    <form [formGroup]="lineForm" novalidate>
+      <div class="form-group">
+        <mat-form-field *ngIf="newLine" class="div-full-width">
+          <input formControlName='lineId' matInput placeholder="Linija" required>
+          <mat-error *ngIf="lineForm.controls['lineId'].errors && lineForm.controls['lineId'].errors['required']">Obavezno polje</mat-error>
+        </mat-form-field>
+        <mat-form-field class="div-full-width">
+          <input formControlName='direction' matInput placeholder="Naziv" required>
+          <mat-error *ngIf="lineForm.controls['direction'].errors && lineForm.controls['direction'].errors['required']">Obavezno polje</mat-error>
+        </mat-form-field>
+      </div>
+      <button *ngIf="line" mat-flat-button color="primary" type="submit" name="editbtn" class='matButtonStyle btn-left-w-32' (click)='editLine()'>Sacuvaj</button>
+      <button *ngIf="newLine" mat-flat-button color="primary" type="submit" name="addbtn" class='matButtonStyle btn-left-w-32' (click)='addLine()'>Kreiraj</button>
+    </form>
+  </div>
+  <pre class='lblMessage' [ngClass]="{'lblError': messageIsError}">{{message}}</pre> 
 </div>

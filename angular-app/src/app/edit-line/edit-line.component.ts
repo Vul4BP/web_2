@@ -20,6 +20,7 @@ export class EditLineComponent implements OnInit, OnDestroy {
 
   eTag: string = '';
   message: string = '';
+  messageIsError: boolean = false;
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent, private _lineService: LineService,
   private formBuilder: FormBuilder) { }
@@ -41,6 +42,15 @@ export class EditLineComponent implements OnInit, OnDestroy {
     });
   }
 
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
+  }
+
+  public click(){
+    this.message = '';
+  }
+
   get getLinef() { return this.getLineForm.controls; }
   get linef() { return this.lineForm.controls; }
 
@@ -52,14 +62,12 @@ export class EditLineComponent implements OnInit, OnDestroy {
     this.newLine.PointLinePaths = new Array<PointPathLine>();
     this.linef.lineId.setValue(this.newLine.Id);
     this.linef.direction.setValue(this.newLine.Direction);
-    this.message = '';
   }
 
   editLineBtnClick(){
     if(this.getLineForm.invalid)
       return;
-
-    this.message = '';
+    
     this.newLine = null;
 
     var lineId = this.getLinef.lineId.value;
@@ -93,12 +101,16 @@ export class EditLineComponent implements OnInit, OnDestroy {
         data => {
           this._parent.RemoveLineFromMapAdmin();
           this.line = null;
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
           if(err.status == 412)
           {
-            this.message = "Neko je vec izvrsio izmene. Osvezite resurs."
+            this.DisplayMessage("Neko je vec izvrsio izmene. Osvezite resurs", true);
+          }
+          else{
+            this.DisplayMessage("Desila se greska", true);
           }
         }
       )
@@ -135,9 +147,11 @@ export class EditLineComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.newLine = null;
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
   }
@@ -145,17 +159,16 @@ export class EditLineComponent implements OnInit, OnDestroy {
     if(this.getLineForm.invalid)
       return;
 
-    this.message = '';
-
     var lineId = this.getLinef.lineId.value;
-
     this._lineService.deleteLine(lineId)
       .subscribe(
         data => {
           this.line = null;
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
   }
