@@ -17,6 +17,9 @@ export class RegisterComponent implements OnInit {
   selectedFile: File;
   imgURL: any;
 
+  message: string = '';
+  messageIsError: boolean = false;
+
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent,
   private formBuilder: FormBuilder, private _service: ProfileService, private _router: Router) { }
 
@@ -33,6 +36,15 @@ export class RegisterComponent implements OnInit {
       type: ['', Validators.required],
       birthday: ['', Validators.required],
     });
+  }
+
+  public click(){
+    this.message = '';
+  }
+
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
   }
 
   get f() { return this.registerForm.controls; }
@@ -81,6 +93,7 @@ export class RegisterComponent implements OnInit {
         },
         err =>{
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
   }

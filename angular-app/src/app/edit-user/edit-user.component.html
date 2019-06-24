@@ -65,7 +65,6 @@
       <label class="custom-file-upload">
         <input formControlName='file' type="file" (change)="onFileChanged($event)" accept="image/png,image/jpeg,image/jpg,image/bmp"/> Ucitaj
       </label>
-      <!-- <input (change)="onFileChanged($event)" type="file" accept="image/png,image/jpeg,image/jpg,image/bmp"> -->
       <img [src]="imgURL" class="margin-top-10" width="100%" height="auto" *ngIf="imgURL">
       <button mat-flat-button color="primary" class='matButtonStyle btn-left-w-32' (click)='dodajSliku()'>Sacuvaj</button>
     </form>
