@@ -19,13 +19,6 @@ input[type="file"] {
   width: 75px;
 }
 
-.div-horizontal{
-  height: 110px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  width: 100%;
-}
-
 .margin-top-10{
   margin-top: 10px;
 }

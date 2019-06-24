@@ -175,3 +175,10 @@ table {
   float: right;
   margin-top: 5px;
 }
+
+.div-horizontal{
+  height: 110px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+}

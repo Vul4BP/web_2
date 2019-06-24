@@ -1,25 +1,30 @@
-<h1>Verifikacija korisnika</h1>
-<div *ngIf="users && users !== undefined && users.length != 0;else message" class="users-holder">
-  <mat-expansion-panel *ngFor="let user of users">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{user.Name}} {{user.Surname}}
-      </mat-panel-title>
-      <mat-panel-description>
-        {{user.Type}}
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-      <div class="div-horizontal">
-        <table>
-        <tr>
-          <td *ngFor="let imgsrc of getUserPhotos(user)"><a href="{{imgsrc}}" target="_blank"><img src="{{imgsrc}}" height="100px" width="auto"></a></td>
-        </tr>
-        </table>
-      </div>
-      <button style="float: left" mat-flat-button color="primary" class='matButtonStyle' (click)='verify(user.Id)'>Prihvati</button>
-      <button style="float: right" mat-flat-button color="primary" class='matButtonStyle' (click)='deny(user.Id)'>Odbaci</button>
-  </mat-expansion-panel>
+<div class="container" (click)="click()">
+  <h1>Verifikacija korisnika</h1>
+  <div *ngIf="users && users !== undefined && users.length != 0;else noUsers">
+    <mat-expansion-panel *ngFor="let user of users">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{user.Name}} {{user.Surname}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{user.Type}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+        <div class="div-horizontal">
+          <table>
+            <tr>
+              <td *ngFor="let imgsrc of getUserPhotos(user)"><a href="{{imgsrc}}" target="_blank"><img src="{{imgsrc}}" height="100px" width="auto"></a></td>
+            </tr>
+          </table>
+        </div>
+        <button mat-flat-button color="primary" class='matButtonStyle btn-left-w-33' (click)='verify(user.Id)'>Prihvati</button>
+        <button mat-flat-button color="primary" class='matButtonStyle btn-right-w-33' (click)='deny(user.Id)'>Odbaci</button>
+    </mat-expansion-panel>
+  </div>
+  <ng-template #noUsers>
+    <div class="div-full-width">
+      <p>Nema korisnika koji čekaju na verifikaciju</p>
+    </div>
+  </ng-template>
+  <pre class='lblMessage' [ngClass]="{'lblError': messageIsError}">{{message}}</pre> 
 </div>
-<ng-template #message>
-  <div style="margin-top: 20px; text-align:center" class="div-full-width">Nema korisnika koji čekaju na verifikaciju</div>
-</ng-template>

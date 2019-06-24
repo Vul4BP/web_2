@@ -2,14 +2,15 @@
     color: white;
 }
 
-.div-horizontal{
-    height: 110px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-bottom: 10px;
+p {
+    font-size: 0.9em;
+    margin: 1px;
+    padding: 0px;
+    text-align: center;
 }
 
-.users-holder{
-    width: 100%;
+td{
+    text-align: center;
+    align-content: center;
 }
   

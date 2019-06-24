@@ -13,11 +13,19 @@ export class VerifyUserComponent implements OnInit {
 
   users: Array<User>;
 
+  message: string = '';
+  messageIsError: boolean = false;
+  
   constructor(private _service: ProfileService, @Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent) { }
 
   ngOnInit() {
     this.getProcessingUsers();
     this._parent.prikaziDesniMeni();
+  }
+
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
   }
 
   getUserPhotos(user: User): Array<string>{
@@ -50,9 +58,11 @@ export class VerifyUserComponent implements OnInit {
     .subscribe(
       data => {
         this.getProcessingUsers();
+        this.DisplayMessage("Uspesno odbijen korisnik", false);
       },
       err => {
         console.log(err);
+        this.DisplayMessage("Desila se greska", true);
       }
     )
   }
@@ -62,10 +72,16 @@ export class VerifyUserComponent implements OnInit {
     .subscribe(
       data => {
         this.getProcessingUsers();
+        this.DisplayMessage("Uspesno verifikovan korisnik", false);
       },
       err => {
         console.log(err);
+        this.DisplayMessage("Desila se greska", true);
       }
     )
+  }
+
+  public click(){
+    this.message = '';
   }
 }
