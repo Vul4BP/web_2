@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   message: string;
+  messageIsError: boolean = false;
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent,
     private formBuilder: FormBuilder, private _service: AuthService, private _router: Router) { }
@@ -25,6 +26,11 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.required]
     });
+  }
+
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
   }
 
   get f() { return this.loginForm.controls; }
@@ -47,7 +53,7 @@ export class LoginComponent implements OnInit {
           data => {
         },
         err => {
-          this.message = "Lozinka i Email nisu validni"
+          this.DisplayMessage("Email i lozinka nisu validni", true);
         })
     }   
   }
