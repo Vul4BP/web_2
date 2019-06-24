@@ -24,7 +24,7 @@ export class EditPricelistComponent implements OnInit {
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['Index','From', 'To'];
 
-  selectedRowIndex: Guid;
+  selectedRowIndex: string;
 
   pricelists : Array<Pricelist>;
 
@@ -173,24 +173,9 @@ export class EditPricelistComponent implements OnInit {
       element.Price = this.priceForm.controls[strName].value;
     });
 
-    this._pricelistService.editPricelit(this.pricelist.Id, fromString, toString, this.pricelist['etag'])
+    this._pricelistService.editPricelist(this.pricelist.Id, fromString, toString, this.pricelist['etag'])
     .subscribe(
       data => {
-        //var index = this.pricehistories.length;
-        //var counter = 0;
-        this.pricehistories.forEach(element => {
-          this._pricehistoryService.editPricehistory(element)
-            .subscribe(
-              data => {
-                // counter++;
-                // if(counter == index)
-                //   this.getAllPricelists();
-              },
-              err => {
-                console.log(err);
-              }
-            )
-        });
         this.pricelist = null;
         this.pricehistories = null;
         this.getAllPricelists();
@@ -214,12 +199,12 @@ export class EditPricelistComponent implements OnInit {
     var fromString = `${from[2]}-${from[0]}-${from[1]}`;
     var to = this.f.to.value.toLocaleDateString().split('/');
     var toString = `${to[2]}-${to[0]}-${to[1]}`;
-    var id = Guid.create();
+    var id = Guid.create().toString();
 
     var pricehostoriesArr = new Array<PriceHistory>();
     this.productTypes.forEach(element => {
       var pricehistory = new PriceHistory();
-      pricehistory.Id = Guid.create();
+      pricehistory.Id = Guid.create().toString();
       pricehistory.PricelistId = id;
       pricehistory.ProductTypeId = element.Id;
       var strName = element.Name.split(' ')[0].toLowerCase();
@@ -227,18 +212,11 @@ export class EditPricelistComponent implements OnInit {
       pricehostoriesArr.push(pricehistory);
     });
 
-    this._pricelistService.addPricelit(id, fromString, toString)
+    this.newPricelist.PriceHistories = pricehostoriesArr;
+    this.newPricelist.Id = id;
+    this._pricelistService.addPricelist(this.newPricelist, fromString, toString)
       .subscribe(
         data => {
-          pricehostoriesArr.forEach(element => {
-            this._pricehistoryService.addPricehistory(element)
-              .subscribe(
-                data => {},
-                err => {
-                  console.log(err);
-                }
-              )
-          });
           this.newPricelist = null;
           this.getAllPricelists();
         },

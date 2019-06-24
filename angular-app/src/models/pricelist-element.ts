@@ -5,6 +5,6 @@ export class PricelistElement {
     public person: string;
     public price: number;
     public id: number;
-    public productTypeId: Guid;
+    public productTypeId: string;
     public purchasable: boolean;
 }

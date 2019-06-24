@@ -23,7 +23,7 @@ export class TicketService {
     return this.http.get(`${this.api_route}/Coefficients`);
   }
 
-  public buyTicket(productTypeId: Guid): Observable<any>{
+  public buyTicket(productTypeId: string): Observable<any>{
     return this.http.post(`${this.api_route}/SoldTickets/Buy/${productTypeId}`,'');
   }
 

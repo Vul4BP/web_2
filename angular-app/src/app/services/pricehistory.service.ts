@@ -13,7 +13,7 @@ export class PricehistoryService {
 
   constructor(private http: HttpClient) { }
 
-  public getSelectedPricehistories(pricelistId: Guid): Observable<any>{
+  public getSelectedPricehistories(pricelistId: string): Observable<any>{
     return this.http.get(`${this.api_route}/Pricelist/${pricelistId}`,{ "headers" : {'Content-type' : 'application/x-www-form-urlencoded'}} );
   }
 

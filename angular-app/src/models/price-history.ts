@@ -3,10 +3,10 @@ import { Pricelist } from './pricelist';
 import { ProductType } from './product-type';
 
 export class PriceHistory {
-    public Id: Guid;
-    public PricelistId: Guid;
+    public Id: string;
+    public PricelistId: string;
     public Pricelist: Pricelist;
-    public ProductTypeId: Guid;
+    public ProductTypeId: string;
     public ProductType: ProductType;
     public Price: number;
 }

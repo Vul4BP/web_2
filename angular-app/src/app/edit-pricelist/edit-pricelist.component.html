@@ -38,27 +38,32 @@
         <mat-error *ngIf="priceForm.controls['to'].errors && priceForm.controls['to'].errors['required']">Obavezno polje</mat-error>
       </mat-form-field>
       <mat-form-field class="div-full-width">
-        <input (focusout)='vremenskaIsNotNumber()' formControlName='vremenska' matInput placeholder="cena za vremensku" required>
+        <input *ngIf="newPricelist" (focusout)='vremenskaIsNotNumber()' formControlName='vremenska' matInput placeholder="cena za vremensku" required>
+        <input *ngIf="pricelist" formControlName='vremenska' matInput placeholder="cena za vremensku" readonly>
         <mat-error *ngIf="priceForm.controls['vremenska'].errors && priceForm.controls['vremenska'].errors['required']">Obavezno polje</mat-error>
         <mat-error *ngIf="priceForm.controls['vremenska'].errors && priceForm.controls['vremenska'].errors['notnumber']">Mora biti broj</mat-error>
       </mat-form-field>
       <mat-form-field class="div-full-width">
-        <input (focusout)='dnevnaIsNotNumber()' formControlName='dnevna' matInput placeholder="cena za dnevnu" required>
+        <input *ngIf="newPricelist" (focusout)='dnevnaIsNotNumber()' formControlName='dnevna' matInput placeholder="cena za dnevnu" required>
+        <input *ngIf="pricelist" formControlName='dnevna' matInput placeholder="cena za dnevnu" readonly>
         <mat-error *ngIf="priceForm.controls['dnevna'].errors && priceForm.controls['dnevna'].errors['required']">Obavezno polje</mat-error>
         <mat-error *ngIf="priceForm.controls['dnevna'].errors && priceForm.controls['dnevna'].errors['notnumber']">Mora biti broj</mat-error>
       </mat-form-field>
-      <mat-form-field class="div-full-width">
-        <input (focusout)='mesecnaIsNotNumber()' formControlName='mesecna' matInput placeholder="cena za mesecnu" required>
+      <mat-form-field  class="div-full-width">
+        <input *ngIf="newPricelist" (focusout)='mesecnaIsNotNumber()' formControlName='mesecna' matInput placeholder="cena za mesecnu" required>
+        <input *ngIf="pricelist" formControlName='mesecna' matInput placeholder="cena za mesecnu" readonly>
         <mat-error *ngIf="priceForm.controls['mesecna'].errors && priceForm.controls['mesecna'].errors['required']">Obavezno polje</mat-error>
         <mat-error *ngIf="priceForm.controls['mesecna'].errors && priceForm.controls['mesecna'].errors['notnumber']">Mora biti broj</mat-error>
       </mat-form-field>
       <mat-form-field class="div-full-width">
-        <input (focusout)='sestomesecnaIsNotNumber()' formControlName='sestomesecna' matInput placeholder="cena za sestomesecnu" required>
+        <input *ngIf="newPricelist" (focusout)='sestomesecnaIsNotNumber()' formControlName='sestomesecna' matInput placeholder="cena za sestomesecnu" required>
+        <input *ngIf="pricelist" formControlName='sestomesecna' matInput placeholder="cena za sestomesecnu" readonly>
         <mat-error *ngIf="priceForm.controls['sestomesecna'].errors && priceForm.controls['sestomesecna'].errors['required']">Obavezno polje</mat-error>
         <mat-error *ngIf="priceForm.controls['sestomesecna'].errors && priceForm.controls['sestomesecna'].errors['notnumber']">Mora biti broj</mat-error>
       </mat-form-field>
       <mat-form-field class="div-full-width">
-        <input (focusout)='godisnjaIsNotNumber()' formControlName='godisnja' matInput placeholder="cena za godisnju" required>
+        <input *ngIf="newPricelist" (focusout)='godisnjaIsNotNumber()' formControlName='godisnja' matInput placeholder="cena za godisnju" required>
+        <input *ngIf="pricelist" formControlName='godisnja' matInput placeholder="cena za godisnju" readonly>
         <mat-error *ngIf="priceForm.controls['godisnja'].errors && priceForm.controls['godisnja'].errors['required']">Obavezno polje</mat-error>
         <mat-error *ngIf="priceForm.controls['godisnja'].errors && priceForm.controls['godisnja'].errors['notnumber']">Mora biti broj</mat-error>
       </mat-form-field>
