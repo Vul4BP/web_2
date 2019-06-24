@@ -140,7 +140,8 @@ export class TicketComponent implements OnInit {
             this.DisplayMessage("Karta je kupljena", false);
           },
           err => {
-            this.DisplayMessage(err.error.Message, true);
+            //this.DisplayMessage(err.error.Message, true);
+            this.DisplayMessage("Ne mozete kupiti kartu", true);
           }
         )
     }else{
@@ -153,7 +154,8 @@ export class TicketComponent implements OnInit {
             this.DisplayMessage("Karta je kupljena", false);
           },
           err => {
-            this.DisplayMessage(err.error.Message, true);
+            // this.DisplayMessage(err.error.Message, true);
+            this.DisplayMessage("Ne mozete kupiti kartu", true);
           }
         )
     }

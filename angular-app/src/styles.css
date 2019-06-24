@@ -1,6 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css?family=Cairo&display=swap');
-
 * {
   font-family: 'Cairo', sans-serif;
 }
@@ -10,79 +9,78 @@ body {
     margin: 0;
 }
 
-.square_btn {
-    background-color: transparent;
-    border: transparent;
-    position: relative;
-    display: inline-block;
-    font-weight: bold;
-    padding: 0.25em 0;
-    text-decoration: none;
-    color: white;
-    font-size: 1.14em;
-  }
-  
-  .square_btn:hover{
-    background-color: transparent;
-    border: transparent;
-    color: #f7c859;
-  }
-  
-  .square_btn:focus{
-    outline: 0;
-  }
-  
-  .square_btn_active{
-    background-color: transparent;
-    border: transparent;
-    position: relative;
-    display: inline-block;
-    font-weight: bold;
-    padding: 0.25em 0;
-    text-decoration: none;
-    color: white;
-    font-size: 1.14em;
-  }
-   
-  .square_btn_active:before{
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 4px;
-    top:100%;
-    left: 0;
-    border-radius: 3px;
-    background:white;
-    transition: .2s;
-  }
-   
-  .square_btn_active:hover:before {
-      top: -webkit-calc(100% - 3px);
-      top: calc(100% - 3px);
-      background: #f7c859;
-  }
-  
-  .square_btn_active:hover{
-    background-color: transparent;
-    border: transparent;
-    color: #f7c859;
-  }
-  
-  .square_btn_active:focus{
-    outline: 0;
-  }
+.container{
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 90%;
+}
 
-  h2{
-    color: white;
-    text-align: center;
-  }
+h1 {
+  color: white;
+  text-align: center; 
+  padding: 0px;
+  margin: 20px 0px 0px 0px;
+}
 
-  .nav-link {
-    display: block;
-    padding: 8px 16px;
-    border-radius: 4px;
-    line-height: 24px;
-  }
+.tableFilter {
+  width: 100%;
+  color: white;
+}
+
+.table-container{
+  width: 100%;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-cell {
+  font-size: 0.7em;
+  padding-left: 10px !important;
+}
+
+.mat-header-cell {
+  font-size: 0.9em;
+  padding-left: 10px !important;
+ }
+
+.highlight{
+  background: #fac344;
+  font-weight: bold;
+}
+
+.highlight td {
+  color: black;
+}
+
+.mat-row:hover {
+  background-color:#fac344;
+  cursor: pointer;
+}
+
+.mat-row:hover td {
+  color: black;
+  font-weight: bold;
+}
+
+.mat-expansion-panel-header{
+  font-size: 0.7em;
+}
+
+.mat-panel-description{
+  text-align: left !important;
+}
+
+.timetableJedanSat {
+  font-size: 1.1em;
+}
+
+.timetableMinut {
+  margin-left: 10px;
+  font-size: 0.9em;
+}
 
 ::-webkit-scrollbar-track
 {
@@ -94,7 +92,7 @@ body {
 
 ::-webkit-scrollbar
 {
-	width: 12px;
+	width: 10px;
 	background-color: #000;
 }
 
@@ -111,15 +109,43 @@ body {
   font-weight: bold;
 }
 
-.btnInfoWindow {
-  color:red;
-  background-color: greenyellow;
-}
-
 .mat-expansion-panel {
   border-radius: 0 !important;
 }
 
-h1{
-  color:white;
+.disabled-row {
+  background: #3a0f0f;
 }
+
+.mat-row.disabled-row:hover {
+  background-color:#791c1c;
+  cursor: not-allowed;
+}
+
+.mat-row.disabled-row:hover td {
+  color: white;
+}
+
+.lblMessage {
+  color: rgb(0, 175, 0);
+  font-size: 1.1em;
+  margin-top: 5px;
+  font-weight: bold;
+  font-stretch: semi-condensed;
+  font-variant-caps: all-petite-caps;
+}
+
+.lblError {
+  color: rgb(240, 26, 26);
+}
+
+.btn-left-w-32 {
+  width: 32%;
+}
+
+/* .nav-link {
+  display: block;
+  padding: 8px 16px;
+  border-radius: 4px;
+  line-height: 24px;
+} */

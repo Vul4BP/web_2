@@ -102,6 +102,9 @@ export class TimetableComponent implements OnInit {
 
     var timetableJson = new Array<string>();
 
+    if(selectedDayTimesJson == null)
+      return timetableJson;
+    
     let polasciPoSatima = {};
     selectedDayTimesJson.forEach(
       (item, indeks) => {
