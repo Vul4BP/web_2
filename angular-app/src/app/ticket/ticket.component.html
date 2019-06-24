@@ -1,4 +1,4 @@
-<div *ngIf="dataSource" class="container">
+<div (click)='click()' *ngIf="dataSource" class="container">
   <h1>Cenovnik</h1>
   <mat-form-field class='tableFilter'>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">

@@ -35,6 +35,7 @@ export class EditPricelistComponent implements OnInit {
   productTypes: Array<ProductType>;
 
   message: string = '';
+  messageIsError: boolean = false;
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent, private formBuilder: FormBuilder,
     private _pricelistService: PricelistService, private _pricehistoryService: PricehistoryService,
@@ -65,6 +66,11 @@ export class EditPricelistComponent implements OnInit {
         }
       )
 
+  }
+
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
   }
 
   getAllPricelists(){
@@ -136,8 +142,6 @@ export class EditPricelistComponent implements OnInit {
           console.log(err);
         }
       )
-
-    this.message = '';
   }
 
   setFormData(){
@@ -155,8 +159,6 @@ export class EditPricelistComponent implements OnInit {
     this.pricehistories = null;
     this.priceForm.reset();
     this.selectedRowIndex = null;
-
-    this.message = '';
   }
 
   editPricelist(){
@@ -179,12 +181,15 @@ export class EditPricelistComponent implements OnInit {
         this.pricelist = null;
         this.pricehistories = null;
         this.getAllPricelists();
+        this.DisplayMessage("Uspesno izvrsene promene", false);
       },
       err => {
         console.log(err);
         if(err.status == 412)
         {
-          this.message = "Neko je vec izvrsio izmene. Osvezite resurs."
+          this.DisplayMessage("Neko je vec izvrsio izmene. Osvezite resurs", true);
+        }else{
+          this.DisplayMessage("Desila se greska", true);
         }
       }
     )
@@ -219,9 +224,11 @@ export class EditPricelistComponent implements OnInit {
         data => {
           this.newPricelist = null;
           this.getAllPricelists();
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
   }
@@ -235,12 +242,16 @@ export class EditPricelistComponent implements OnInit {
           this.pricelist = null;
           this.newPricelist = null;
           this.priceForm.reset();
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
-    
+  }
+
+  public click(){
     this.message = '';
   }
 

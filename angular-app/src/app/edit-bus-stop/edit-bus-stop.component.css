@@ -1,4 +1,16 @@
 :host {
+  color: white;
+}
+
+.height-150{
+  max-height: 150px;
+}
+
+.margin-top-10{
+  margin-top: 10px;
+}
+
+/* :host {
     color: white;
 }
 
@@ -58,4 +70,4 @@
   .mat-row:hover td {
     color: black;
     font-weight: bold;
-  }
+  } */

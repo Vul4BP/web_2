@@ -159,6 +159,9 @@ export class TicketComponent implements OnInit {
           }
         )
     }
+  }
 
+  public click(){
+    this.message = '';
   }
 }

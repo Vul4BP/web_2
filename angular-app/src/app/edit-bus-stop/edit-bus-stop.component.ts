@@ -25,6 +25,7 @@ export class EditBusStopComponent implements OnInit {
   selectedRowIndex: String;
   eTag: string;
   message: string = '';
+  messageIsError: boolean = false;
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent, private formBuilder: FormBuilder,
     private _busStopService: BusStopService, private _busStopsOnLineService: BusStopsOnLineService) { }
@@ -49,6 +50,14 @@ export class EditBusStopComponent implements OnInit {
   get linef() { return this.lineForm.controls; }
   get busStopf() { return this.busStopForm.controls; }
 
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
+  }
+
+  public click(){
+    this.message = '';
+  }
 
   addBtnClick(){
     this.selectedRowIndex = null;
@@ -139,12 +148,16 @@ export class EditBusStopComponent implements OnInit {
       .subscribe(
         data => {
           this.busStop = null;
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
           if(err.status == 412)
           {
-            this.message = "Neko je vec izvrsio izmene. Osvezite resurs."
+            this.DisplayMessage("Neko je vec izvrsio izmene. Osvezite resurs", true);
+          }
+          else{
+            this.DisplayMessage("Desila se greska", true);
           }
         }
       )
@@ -167,9 +180,11 @@ export class EditBusStopComponent implements OnInit {
       .subscribe(
         data => {
           this.newBusStop = null;
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
   }
@@ -186,9 +201,11 @@ export class EditBusStopComponent implements OnInit {
         data => {
           this.busStop = null;
           this.selectedRowIndex = null;
+          this.DisplayMessage("Uspesno izvrsene promene", false);
         },
         err => {
           console.log(err);
+          this.DisplayMessage("Desila se greska", true);
         }
       )
   }

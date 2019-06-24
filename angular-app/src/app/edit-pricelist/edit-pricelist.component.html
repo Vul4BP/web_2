@@ -1,4 +1,4 @@
-<div class="container">
+<div (click)='click()' class="container">
   <h1>Cenovnik</h1>
   <button mat-flat-button color="primary" type="submit" name="editBtn" class='matButtonStyle btn-left-w-32' (click)="addBtnClick()">Kreiraj novi</button>
   <div *ngIf="pricelists" class="table-container height-150 margin-top-10">
@@ -24,7 +24,7 @@
     <button mat-flat-button color="primary" type="submit" name="deleteBtn" class='matButtonStyle btn-right-w-33 margin-top-10' (click)="deleteBtnClick()">Obrisi</button>
   </div>
   <div *ngIf="pricelist || newPricelist" class="margin-top-10">
-    <form [formGroup]="priceForm" novalidate style='text-align: center;'>     
+    <form [formGroup]="priceForm" novalidate>     
       <div class="form-group">
         <mat-form-field class="example-left-half-width">
           <input matInput [matDatepicker]="pickerFrom" formControlName='from' placeholder="Vazi od" required>
@@ -69,9 +69,9 @@
           <mat-error *ngIf="priceForm.controls['godisnja'].errors && priceForm.controls['godisnja'].errors['notnumber']">Mora biti broj</mat-error>
         </mat-form-field>
       </div> 
-      <label *ngIf="message!=''" style="color: red;">{{message}}</label>  
-      <button *ngIf="pricelist" mat-flat-button color="primary" type="submit" class='matButtonStyle' (click)='editPricelist()'>Sacuvaj cenovnik</button>
-      <button *ngIf="newPricelist" mat-flat-button color="primary" type="submit" class='matButtonStyle' (click)='addPricelist()'>Dodaj cenovnik</button>
+      <button *ngIf="pricelist" mat-flat-button color="primary" type="submit" class='matButtonStyle btn-left-w-32' (click)='editPricelist()'>Sacuvaj</button>
+      <button *ngIf="newPricelist" mat-flat-button color="primary" type="submit" class='matButtonStyle btn-left-w-32' (click)='addPricelist()'>Sacuvaj</button>
     </form>
   </div>
+  <pre class='lblMessage' [ngClass]="{'lblError': messageIsError}">{{message}}</pre> 
 </div>

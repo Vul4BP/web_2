@@ -128,8 +128,9 @@ table {
 
 .lblMessage {
   color: rgb(0, 175, 0);
-  font-size: 1.1em;
-  margin-top: 5px;
+  font-size: 1.2em;
+  margin-top: 3px;
+  margin-bottom: 3px;
   font-weight: bold;
   font-stretch: semi-condensed;
   font-variant-caps: all-petite-caps;
