@@ -284,6 +284,11 @@ namespace WebApp.Controllers
                 return BadRequest("Invalid file type");
             }
 
+            if(userInDb.Files == null)
+            {
+                userInDb.Files = "";
+            }
+
             if (userInDb.Files != null & userInDb.Files.Length > 0) {
                 userInDb.Files += "," + String.Join(",", listaNazivaUploadovanihFajlova);
             } else {

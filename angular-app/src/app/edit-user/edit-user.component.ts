@@ -14,10 +14,16 @@ export class EditUserComponent implements OnInit {
   @Input() id: string;
   myForm: FormGroup;
   passwordForm: FormGroup;
+  fileForm: FormGroup;
+
   selectedValue: string;
   user: User;
   message: string = '';
+  messageIsError: boolean = false;
   message_password: string = '';
+  message_passwordIsError: boolean = false;
+  message_file: string = '';
+  message_fileIsError: boolean = false;
   selectedFile: File;
   imgURL: any;
 
@@ -43,11 +49,21 @@ export class EditUserComponent implements OnInit {
             repeat_password: ['', Validators.required],
           });
 
+          this.fileForm = this.formBuilder.group({
+            file: ['', Validators.required],
+          });
+
         },
         err => {
           console.log(err);
         }
       )
+  }
+
+  public click(){
+    this.message = '';
+    this.message_password = '';
+    this.message_file = '';
   }
 
   getUserPhotos(): Array<string>{
@@ -65,6 +81,7 @@ export class EditUserComponent implements OnInit {
 
   get f() { return this.myForm.controls; }
   get passf() { return this.passwordForm.controls; }
+  get filef() { return this.fileForm.controls; }
 
   isSameAsPassword(){
     if (this.passf.new_password.value != this.passf.repeat_password.value)
@@ -83,13 +100,13 @@ export class EditUserComponent implements OnInit {
     this._service.changePassword(old_pass, new_pass, rep_pass)
       .subscribe(
         data => {
-          this.message_password = "Uspesno ste promenuli lozinku"
+          this.DisplayPasswordMessage("Uspesno promenjena lozinka", false);
         },
         err => {
           if(err.error.ModelState[""] == "Incorrect password.")
-            this.message_password = "Stara lozinka nije odgovarajuca";
+            this.DisplayPasswordMessage("Stara lozinka nije dobra", true);
           else
-            this.message_password = "Desila se greska";
+            this.DisplayPasswordMessage("Desila se greska", true);
         }
       )
   }
@@ -102,7 +119,6 @@ export class EditUserComponent implements OnInit {
     reader.onload = (_event) => { 
       this.imgURL = reader.result; 
     }
-
   }
 
   dodajSliku(){
@@ -113,18 +129,19 @@ export class EditUserComponent implements OnInit {
       .subscribe(
         data => {
           this.user.Files = data;
-          //this.selectedFile = null;
-          //this.imgURL = '';
+          this.DisplayFileMessage("Uspesno dodata slika", false);
+          this.selectedFile = null;
+          this.imgURL = '';
+          this.fileForm.reset();
         },
         err =>{
           console.log(err);
+          this.DisplayFileMessage("Desila se greska", true);
         }
       )
   }
 
   edit(){
-    this.message = '';
-
     if (this.myForm.invalid) {
       return;
     }
@@ -142,11 +159,27 @@ export class EditUserComponent implements OnInit {
     this._service.editUser(user, dobString)
     .subscribe(
       data => {
-        this.message = "Uspesno izvrsene promene";
+        this.DisplayMessage("Uspesno izvrsene promene", false);
       },
       err => {
         console.log(err);
+        this.DisplayMessage("Desila se greska", true);
       }
     )
+  }
+
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
+  }
+
+  DisplayPasswordMessage(text:string, error:boolean) {
+    this.message_password = text;
+    this.message_passwordIsError = error;
+  }
+
+  DisplayFileMessage(text:string, error:boolean) {
+    this.message_file = text;
+    this.message_fileIsError = error;
   }
 }

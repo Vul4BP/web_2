@@ -1,51 +1,5 @@
 :host {
-    color: white;
-  }
-
-  .example-full-width {
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-  }
-  
-  .text-red{
-    color: red;
-  }
-
-  mat-error {
-    float: right;
-  }
-
-  .text-right{
-      text-align: right;
-      margin-right: 5px;
-  }
-
-  .margin-10{
-    float: left; 
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 10px;
-  }
-
-  .div-horizontal{
-    height: 110px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-left: 10%;
-    width: 80%;
-}
-
-.btn-right-w-33{
-  width: 33%;
-  margin-right: 10px;
-  margin-top: 10px;
-}
-
-.btn-left-w-33{
-  width: 33%;
-  margin-left: 10%;
-  float: left;
+  color: white;
 }
 
 input[type="file"] {
@@ -61,4 +15,22 @@ input[type="file"] {
   color: black;
   font-weight: bold;
   margin-right: 10px;
+  text-align: center;
+  width: 75px;
+}
+
+.div-horizontal{
+  height: 110px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+}
+
+.margin-top-10{
+  margin-top: 10px;
+}
+
+td{
+  text-align: center;
+  align-content: center;
 }
