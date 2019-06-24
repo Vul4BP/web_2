@@ -158,23 +158,19 @@ table {
 }
 
 .div-full-width{
-  margin-top: 10px;
   width: 100%;
+  margin-top: 5px;
 }
 
-.example-left-half-width {
+.div-left-half-width {
   width: 48%;
   margin-right: 2%;
+  margin-top: 5px;
 }
   
-.example-right-half-width {
+.div-right-half-width {
   width: 48%;
   margin-left: 2%;
-} 
-
-/* .nav-link {
-  display: block;
-  padding: 8px 16px;
-  border-radius: 4px;
-  line-height: 24px;
-} */
+  float: right;
+  margin-top: 5px;
+}

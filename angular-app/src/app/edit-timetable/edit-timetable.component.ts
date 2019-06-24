@@ -29,6 +29,7 @@ export class EditTimetableComponent implements OnInit {
   oldTimes: string;
 
   message: string = '';
+  messageIsError: boolean = false;
 
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent,
      private _timetablesevice: TimetableService, private _lineService: LineService, private formBuilder: FormBuilder) { }
@@ -43,6 +44,12 @@ export class EditTimetableComponent implements OnInit {
     this.lineForm = this.formBuilder.group({
       lineId: ['', Validators.required]
     });
+  }
+
+  
+  DisplayMessage(text:string, error:boolean) {
+    this.message = text;
+    this.messageIsError = error;
   }
 
   getAllTimetables(){
@@ -95,8 +102,6 @@ export class EditTimetableComponent implements OnInit {
     this.timetableJson = null;
     this.selectedDay = null;
     this.newTimetable = null;
-
-    this.message = '';
   }
 
   getTimesJson(timetableId: Guid, pickedDay: string){
@@ -124,6 +129,10 @@ export class EditTimetableComponent implements OnInit {
     }
 
     var timetableJson = new Array<string>();
+    if(selectedDayTimesJson == null){
+      this.timetableJson = timetableJson;
+      return;
+    }
 
     let polasciPoSatima = {};
     selectedDayTimesJson.forEach(
@@ -150,6 +159,10 @@ export class EditTimetableComponent implements OnInit {
 
   get f() { return this.timeForm.controls; }
   get linef() { return this.lineForm.controls; }
+
+  public click(){
+    this.message = '';
+  }
 
   addTime(){
     if (this.timeForm.invalid) {
@@ -225,12 +238,16 @@ export class EditTimetableComponent implements OnInit {
         this.timetableJson = null;
         this.selectedDay = null;
         this.newTimetable = null;
+        this.DisplayMessage("Uspesno izvrsene promene", false);
       },
       err => {
         console.log(err);
         if(err.status == 412)
         {
-          this.message = "Neko je vec izvrsio izmene. Osvezite resurs."
+          this.DisplayMessage("Neko je vec izvrsio izmene. Osvezite resurs", true);
+        }
+        else{
+          this.DisplayMessage("Desila se greska", true);
         }
       });
   }
@@ -241,7 +258,6 @@ export class EditTimetableComponent implements OnInit {
     this.newTimetable = new Timetable();
     this.newTimetable.Id = this.selectedRowIndex;
     this.newTimetable.Times = JSON.stringify({"Radni_dan": [], "Subota": [], "Nedelja": []});
-    this.message = '';
   }
 
   minuteIsNotNumber(){
@@ -270,9 +286,11 @@ export class EditTimetableComponent implements OnInit {
         this.getTimesJson(this.selectedRowIndex,this.selectedDay);
         this.oldTimes = null;
         this.newTimetable = null;
+        this.DisplayMessage("Uspesno izvrsene promene", false);
       },
       err => {
         console.log(err);
+        this.DisplayMessage("Desila se greska", true);
       });
   }
 
@@ -286,11 +304,11 @@ export class EditTimetableComponent implements OnInit {
     .subscribe(
       data => {
         this.getAllTimetables();
+        this.DisplayMessage("Uspesno izvrsene promene", false);
       },
       err => {
         console.log(err);
+        this.DisplayMessage("Desila se greska", true);
       });
-    
-    this.message = '';
   }
 }

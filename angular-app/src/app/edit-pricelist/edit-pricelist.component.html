@@ -26,13 +26,13 @@
   <div *ngIf="pricelist || newPricelist" class="margin-top-10">
     <form [formGroup]="priceForm" novalidate>     
       <div class="form-group">
-        <mat-form-field class="example-left-half-width">
+        <mat-form-field class="div-left-half-width">
           <input matInput [matDatepicker]="pickerFrom" formControlName='from' placeholder="Vazi od" required>
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom></mat-datepicker>
           <mat-error *ngIf="priceForm.controls['from'].errors && priceForm.controls['from'].errors['required']">Obavezno polje</mat-error>
         </mat-form-field>
-        <mat-form-field class="example-right-half-width">
+        <mat-form-field class="div-right-half-width">
           <input matInput [matDatepicker]="pickerTo" formControlName='to' placeholder="Vazi do" required>
           <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo></mat-datepicker>
