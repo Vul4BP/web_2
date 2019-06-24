@@ -143,6 +143,34 @@ table {
   width: 32%;
 }
 
+.btn-left-w-33{
+  width: 33%;
+  margin-left: 10%;
+  margin-right: 7%;
+}
+
+.btn-right-w-33{
+  width: 33%;
+  margin-right: 10%;
+  margin-left: 7%;
+  float: right;
+}
+
+.div-full-width{
+  margin-top: 10px;
+  width: 100%;
+}
+
+.example-left-half-width {
+  width: 48%;
+  margin-right: 2%;
+}
+  
+.example-right-half-width {
+  width: 48%;
+  margin-left: 2%;
+} 
+
 /* .nav-link {
   display: block;
   padding: 8px 16px;
