@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, NgZone } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import {} from 'googlemaps';
 import { Router, RoutesRecognized } from '@angular/router';
 import { Line } from 'src/models/line';
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   public displayedPanel: string = 'none';
 
   constructor(private _router: Router, private _auth: AuthService,private _lineService: LineService,
-  private _busService: BusService, /*private ngZone: NgZone */) { }
+  private _busService: BusService) { }
 
   ngOnInit(): void {
     this._router.events.subscribe(event => {
@@ -600,5 +600,10 @@ private subscribeForBusPositions () {
       this._router.navigate(['/home/profile']);
     else
       return;
+  }
+
+  logout(){
+    this._auth.logout();
+    this._router.navigate(['/home/login']);
   }
 }

@@ -68,6 +68,11 @@
                     <mat-icon><i class="material-icons md-48 md-tooltip--left" data-md-tooltip="IZMENA LINIJA">edit_location</i></mat-icon>
                 </button> 
             </li>
+            <li>
+                <button (click)="logout()" [disableRipple]="true" mat-icon-button>
+                    <mat-icon><i class="material-icons md-48 md-tooltip--left" data-md-tooltip="ODJAVA">power_settings_new</i></mat-icon>
+                </button> 
+            </li>
         </ul>
     </nav>
     <div id='mapOverlay' (click)='NavigateToMap()' class='map-no-overlay'></div>

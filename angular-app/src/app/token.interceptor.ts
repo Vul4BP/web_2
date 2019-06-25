@@ -11,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor {
         // add authorization header with jwt token if available
         var token = this.authService.getToken();
         var role = this.authService.getRole();
-        if (token && role) {
+        if (token && role && request.url != 'http://www.floatrates.com/daily/rsd.json') {
             request = request.clone({
                 setHeaders: { 
                     Authorization: `Bearer ${token}`
