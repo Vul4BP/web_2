@@ -3,7 +3,7 @@
   <mat-form-field class='tableFilter'>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
-  <div class="table-container height-450">
+  <div class="table-container height-400">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="productTypeName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tip karte </th>
@@ -23,7 +23,14 @@
     </table>
   </div>
   <div>
-    <button [disabled]="selectedRowElement == null" mat-flat-button color="primary" class='matButtonStyle margin-top-20 btn-left-w-32' (click)='buyTicket(selectedRowElement)'>Kupi kartu</button><br>
+    <!-- <button [disabled]="selectedRowElement == null" mat-flat-button color="primary" class='matButtonStyle margin-top-20 btn-left-w-32' (click)='buyTicket(selectedRowElement)'>Kupi kartu</button><br> -->
+    <div class="margin-top-20" hidden #divPaypal>
+      <p *ngIf="selectedRowElement">* paypal ne podrzava RSD, zato se cena konvertuje iz RSD u EUR</p>
+      <label *ngIf="selectedRowElement" class="font-1-1">{{finalAmount}} eur</label>
+      <!-- <label class="font-1-1" *ngIf="paypalLoad">Paypal dugme se ucitava</label> -->
+      <div id="paypal-checkout-btn"></div>
+    </div>
+
     <pre class='lblMessage' [ngClass]="{'lblError': messageIsError}">{{message}}</pre>
     <div *ngIf="lastBoughtTicketID.length > 0" class="boughtTicketContainer">
       <label>ID Karte: <b>{{lastBoughtTicketID}}</b></label><br>
@@ -32,4 +39,3 @@
     </div>
   </div>
 </div>
-  

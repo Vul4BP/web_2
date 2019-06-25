@@ -7,7 +7,7 @@
                     <mat-icon><i class="material-icons md-48 md-tooltip--right" data-md-tooltip="POLASCI">departure_board</i></mat-icon>
                 </button> 
             </li>
-            <li>
+            <li *ngIf="_auth.getRole() != 'Controller' && _auth.getRole() != 'Admin'">
                 <button (click)="navigateByIconClick('tickets')" [disableRipple]="true" mat-icon-button>
                     <mat-icon><i class="material-icons md-48 md-tooltip--right" data-md-tooltip="KARTE">local_offer</i></mat-icon>
                 </button> 

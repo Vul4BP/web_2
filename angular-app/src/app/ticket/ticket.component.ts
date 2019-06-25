@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, forwardRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, forwardRef, ViewChild, AfterViewChecked, ElementRef  } from '@angular/core';
 import { HomeComponent } from '../home/home.component';
 import { FormBuilder } from '@angular/forms';
 import { TicketService } from '../services/ticket.service';
@@ -9,12 +9,14 @@ import { MatTableDataSource, MatSort } from '@angular/material';
 import { Guid } from 'guid-typescript';
 import { AuthService } from '../services/auth.service';
 
+declare let paypal: any;
+
 @Component({
   selector: 'app-ticket',
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.css']
 })
-export class TicketComponent implements OnInit {
+export class TicketComponent implements OnInit, AfterViewChecked {
 
   priceHistories: Array<PriceHistory> = new Array<PriceHistory>();
   coefficients: Array<Coefficient> = new Array<Coefficient>();
@@ -29,8 +31,49 @@ export class TicketComponent implements OnInit {
 
   displayedColumns: string[] = ['productTypeName', 'person','price'];
   dataSource = new MatTableDataSource();
-  @ViewChild(MatSort) sort: MatSort;
 
+  currencyRate: number;
+
+  @ViewChild('divPaypal') divPaypal : ElementRef;
+  @ViewChild(MatSort) sort: MatSort;
+  
+  //----------------PAYPAL-----------------
+  addScript: boolean = false;
+  paypalLoad: boolean = true;
+  
+  finalAmount: number = 1;
+
+  paypalConfig = {
+    env: 'sandbox',
+    client: {
+      sandbox: '<your client-id here>',
+      production: '<your-production-key here>'
+    },
+    commit: true,
+    locale: 'en_US',
+    style: {
+      size: 'medium',
+      shape: 'rect',
+      label: 'paypal',
+    },
+    payment: (data, actions) => {
+      return actions.payment.create({
+        payment: {
+          transactions: [
+            { amount: { total: this.finalAmount, currency: 'EUR' } }
+          ]
+        }
+      });
+    },
+    onAuthorize: (data, actions) => {
+      return actions.payment.execute().then((payment) => {
+        //Do something when payment is successful.
+        this.buyTicket(this.selectedRowElement);
+      })
+    }
+  };
+  //---------------------------------------
+  
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent,
     private formBuilder: FormBuilder, private _service: TicketService, private _auth: AuthService) { }
 
@@ -48,6 +91,16 @@ export class TicketComponent implements OnInit {
                 let priceList = this.createPricelist();//.sort((a,b) => Number(b.purchasable) - Number(a.purchasable))
                 this.dataSource = new MatTableDataSource(priceList.sort((a,b) => Number(b.purchasable) - Number(a.purchasable)));
                 this.dataSource.sort = this.sort;
+                this._service.getCurrencyRates()
+                  .subscribe(
+                    data =>{
+                      this.currencyRate = data['eur']['rate'];  //uzmi dnevni kurs
+                    }, 
+                    err => {
+                      console.log(err);
+                      this.currencyRate = 0.0084734776366444; //kurs po datumu 25.06.2019
+                    }
+                  )
               },
               err => {
                 console.log(err);
@@ -120,6 +173,10 @@ export class TicketComponent implements OnInit {
     if (row.purchasable) {
       this.selectedRowIndex = row.id;
       this.selectedRowElement = row;
+      var priceStr =  (this.selectedRowElement.price * this.currencyRate).toFixed(2);
+      this.finalAmount = Number.parseFloat(priceStr);
+      if(this.divPaypal.nativeElement.hidden == true)
+        this.divPaypal.nativeElement.hidden = false;
     }
   }
 
@@ -163,5 +220,27 @@ export class TicketComponent implements OnInit {
 
   public click(){
     this.message = '';
+  }
+
+  //----------------PAYPAL-----------------
+
+  ngAfterViewChecked(): void {
+    if (!this.addScript) {
+      this.addPaypalScript().then(() => {
+        paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn');
+        this.paypalLoad = false;
+        //this.divPaypal.nativeElement.hidden = true; //sakrij dugme dok korisnik ne selektuje neku kartu
+      })
+    }
+  }
+  
+  addPaypalScript() {
+    this.addScript = true;
+    return new Promise((resolve, reject) => {
+      let scripttagElement = document.createElement('script');    
+      scripttagElement.src = 'https://www.paypalobjects.com/api/checkout.js';
+      scripttagElement.onload = resolve;
+      document.body.appendChild(scripttagElement);
+    })
   }
 }

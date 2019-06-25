@@ -42,4 +42,8 @@ export class TicketService {
   public getUserTickets(): Observable<any> {
     return this.http.get(`${this.api_route}/SoldTickets/GetUserTickets`);
   }
+
+  public getCurrencyRates(): Observable<any> {
+    return this.http.get('http://www.floatrates.com/daily/rsd.json');
+  }
 }
