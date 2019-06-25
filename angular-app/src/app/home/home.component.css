@@ -34,7 +34,7 @@
 .navMenu {
   position: absolute;
   z-index: 95;
-  top: 36%;
+  top: 30px;
 }
 
 .navMenu ul {
@@ -43,48 +43,18 @@
   margin: 0;
 }
 
-.navMenu a {
-  text-decoration: none;
-}
-
-.navMenu a:hover {
-  text-decoration: none;
-}
-
-.navMenu .nav-link2 {
-  font-size: 1.17em;
-  padding: 3px 25px;
-  padding-top: 5px;
-  background-color: rgba(255, 255, 255, 0.35);
-  color: black;
-  box-shadow: 0 0 10px 0;
-  transition: background-color 0.3s;
-}
-
-.navMenu .nav-link2:hover {
-  background-color: rgba(255, 255, 255, 0.85);
-}
-
-.navLeft .nav-link2 {
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 90px;
-}
-
-.navRight .nav-link2 {
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 90px;
-}
-
 .navMenu li {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .navLeft ul {
   text-align: left;
+  margin-left: 20px;
 }
 
 .navRight ul {
   text-align: right;
+  margin-right: 35px;
 }
 
 .logo-holder {

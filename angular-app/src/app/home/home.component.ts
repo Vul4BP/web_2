@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   public displayedPanel: string = 'none';
 
   constructor(private _router: Router, private _auth: AuthService,private _lineService: LineService,
-    private _busService: BusService,private ngZone: NgZone) { }
+  private _busService: BusService, /*private ngZone: NgZone */) { }
 
   ngOnInit(): void {
     this._router.events.subscribe(event => {
@@ -571,5 +571,34 @@ private subscribeForBusPositions () {
 
   getPrikazaneLinije(): Array<any>{
     return this.prikazaneLinije;
+  }
+
+  navigateByIconClick(icon: string){
+    if(icon == "login")
+      this._router.navigate(['/home/login']);
+    else if(icon == "register")
+      this._router.navigate(['/home/register']);
+    else if(icon == "timetable")
+      this._router.navigate(['/home/timetable']);
+    else if(icon == "tickets")
+      this._router.navigate(['/home/tickets']);
+    else if(icon == "verification")
+      this._router.navigate(['/home/verification']);
+    else if(icon == "check-ticket")
+      this._router.navigate(['/home/check-ticket']);
+    else if(icon == "bought-tickets")
+      this._router.navigate(['/home/bought-tickets']);
+    else if(icon == "edit-pricelist")
+      this._router.navigate(['/home/edit-pricelist']);
+    else if(icon == "edit-busstop")
+      this._router.navigate(['/home/edit-busstop']);
+    else if(icon == "edit-timetables")
+      this._router.navigate(['/home/edit-timetables']);
+    else if(icon == "edit-lines")
+      this._router.navigate(['/home/edit-lines']);
+    else if(icon == "profile")
+      this._router.navigate(['/home/profile']);
+    else
+      return;
   }
 }
