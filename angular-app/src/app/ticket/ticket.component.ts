@@ -46,6 +46,7 @@ export class TicketComponent implements OnInit, AfterViewChecked {
   paypalConfig = {
     env: 'sandbox',
     client: {
+      //ne zaboravi kopirati client-id pre pokretanja
       sandbox: '<your client-id here>',
       production: '<your-production-key here>'
     },
