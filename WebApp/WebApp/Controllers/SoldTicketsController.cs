@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,7 +27,7 @@ namespace WebApp.Controllers
         [Route("api/SoldTickets/BuyAnonymous")]
         [HttpPost]
         [ResponseType(typeof(SoldTicket))]
-        public IHttpActionResult BuyTicketAnonymous()
+        public IHttpActionResult BuyTicketAnonymous(PaymentDetails paymentDetails)
         {
             var productType = unitOfWork.ProductTypes.Find(x => x.ExpiresAfterHours == 1).FirstOrDefault();
     
@@ -71,6 +72,13 @@ namespace WebApp.Controllers
                 0,
                 1);
 
+
+            //provera da li je karta placena koliko treba
+            if (!CheckPrice(soldAtPrice, paymentDetails.CurrencyRate, paymentDetails.ItemPrice))
+            {
+                return NotFound();
+            }
+
             SoldTicket soldTicket = new SoldTicket()
             {
                 Id = Guid.NewGuid(),
@@ -79,7 +87,8 @@ namespace WebApp.Controllers
                 UserId = "unregistred_users",
                 Price = soldAtPrice,
                 Usages = 0,
-                Type = productType.Name
+                Type = productType.Name,
+                PaymentDetails = paymentDetails
             };
 
             unitOfWork.SoldTickets.Add(soldTicket);
@@ -109,7 +118,7 @@ namespace WebApp.Controllers
         [HttpPost]
         [ResponseType(typeof(SoldTicket))]
         [Authorize(Roles = "AppUser")]
-        public IHttpActionResult BuyTicket(Guid productTypeId) {
+        public IHttpActionResult BuyTicket(Guid productTypeId, PaymentDetails paymentDetails) {
             var userId = User.Identity.GetUserId();
 
             var productType = unitOfWork.ProductTypes.Get(productTypeId);
@@ -202,7 +211,13 @@ namespace WebApp.Controllers
                     0, 
                     1);
             }
-            
+
+            //provera da li je karta placena koliko treba
+            if (!CheckPrice(soldAtPrice, paymentDetails.CurrencyRate, paymentDetails.ItemPrice))
+            {
+                return NotFound();
+            }
+
             SoldTicket soldTicket = new SoldTicket() {
                 Id = Guid.NewGuid(),
                 DateOfPurchase = DateTime.Now,
@@ -210,7 +225,8 @@ namespace WebApp.Controllers
                 UserId = userId,
                 Price = soldAtPrice,
                 Usages = 0,
-                Type = productType.Name
+                Type = productType.Name,
+                PaymentDetails = paymentDetails
             };
 
             unitOfWork.SoldTickets.Add(soldTicket);
@@ -400,6 +416,16 @@ namespace WebApp.Controllers
         private bool SoldTicketExists(Guid id)
         {
             return unitOfWork.SoldTickets.Find(e => e.Id == id).Count() > 0;
+        }
+
+        private bool CheckPrice(Double rsdPrice, Double rate, Double eurPrice)
+        {
+            Double roundedEurToRsd = Math.Round(rsdPrice * rate, 2);
+            if (roundedEurToRsd == eurPrice)
+                return true;
+            else
+                return false;
+
         }
     }
 }

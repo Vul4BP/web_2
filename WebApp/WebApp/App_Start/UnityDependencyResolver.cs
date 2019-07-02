@@ -82,6 +82,7 @@ namespace WebApp.App_Start
             container.RegisterType<IPointPathLineRepository, PointPathLineRepository>();
             container.RegisterType<ISoldTicketRepository, SoldTicketRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
+            container.RegisterType<IPaymentDetailsRepository, PaymentDetailsRepository>();
 
             //container.RegisterType<IServiceRepository, ServiceRepository>();
         }

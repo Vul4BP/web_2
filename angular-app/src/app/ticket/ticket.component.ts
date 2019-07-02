@@ -6,8 +6,8 @@ import { PriceHistory } from 'src/models/price-history';
 import { Coefficient } from 'src/models/coefficient';
 import { PricelistElement } from 'src/models/pricelist-element';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { Guid } from 'guid-typescript';
 import { AuthService } from '../services/auth.service';
+import { PaymentDetails } from 'src/models/payment-details';
 
 declare let paypal: any;
 
@@ -60,19 +60,44 @@ export class TicketComponent implements OnInit, AfterViewChecked {
     payment: (data, actions) => {
       return actions.payment.create({
         payment: {
+          intent: "sale",
           transactions: [
-            { amount: { total: this.finalAmount, currency: 'EUR' } }
+            { amount: { total: this.finalAmount, currency: 'EUR' },
+              description: "Kupovina autobuske karte za gradski prevoz u Novom Sadu",
+              item_list: {
+                shipping_address: {
+                  line1: "JGSP",
+                  city: "Novi Sad",
+                  country_code: "RS",
+                  postal_code: "21000",
+                },
+                items: [{
+                  name: this.selectedRowElement.productTypeName,
+                  quantity: 1,
+                  price: this.finalAmount,
+                  currency: 'EUR'
+                }]
+              }
+            }
           ]
         }
       });
     },
-    onAuthorize: (data, actions) => {
-      return actions.payment.execute().then((payment) => {
-        //Do something when payment is successful.
-        this.buyTicket(this.selectedRowElement);
-      })
+    onAuthorize: (data, actions) => {      
+      return actions.payment.execute()
+        .then((paymentDetails) =>  {
+          // Show a success page to the buyer
+          var paymentDetailsObj = new PaymentDetails(paymentDetails);
+          paymentDetailsObj.CurrencyRate = this.currencyRate;
+          this.buyTicket(this.selectedRowElement,JSON.stringify(paymentDetailsObj));
+        });
+    },
+    onError: (err) => {
+      // Show an error page here, when an error occurs
+      console.log(err);
     }
   };
+
   //---------------------------------------
   
   constructor(@Inject(forwardRef(() => HomeComponent)) private _parent: HomeComponent,
@@ -95,11 +120,12 @@ export class TicketComponent implements OnInit, AfterViewChecked {
                 this._service.getCurrencyRates()
                   .subscribe(
                     data =>{
-                      this.currencyRate = data['eur']['rate'];  //uzmi dnevni kurs
+                      var rate = data['eur']['rate'];  //uzmi dnevni kurs
+                      this.currencyRate = Number.parseFloat(rate.toFixed(10));
                     }, 
                     err => {
                       console.log(err);
-                      this.currencyRate = 0.0084734776366444; //kurs po datumu 25.06.2019
+                      this.currencyRate = 0.00847347763; //kurs po datumu 25.06.2019
                     }
                   )
               },
@@ -181,7 +207,7 @@ export class TicketComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  buyTicket(row: PricelistElement){
+  buyTicket(row: PricelistElement, json: any){
     this.DisplayMessage("", false);
     if(row==undefined){
       this.DisplayMessage("Izaberite kartu korisniče", true);
@@ -189,7 +215,7 @@ export class TicketComponent implements OnInit, AfterViewChecked {
     }
 
     if(this._auth.getToken() != null){
-      this._service.buyTicket(row.productTypeId)
+      this._service.buyTicket(row.productTypeId, json)
         .subscribe(
           data => {
             this.lastBoughtTicketID = data.Id;
@@ -203,7 +229,7 @@ export class TicketComponent implements OnInit, AfterViewChecked {
           }
         )
     }else{
-      this._service.buyTicketAnonymous()
+      this._service.buyTicketAnonymous(json)
         .subscribe(
           data => {
             this.lastBoughtTicketID = data.Id;

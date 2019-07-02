@@ -41,6 +41,8 @@ namespace WebApp.Persistence.UnitOfWork
         public ISoldTicketRepository SoldTickets { get; set; }
         [Dependency]
         public IUserRepository Users { get; set; }
+        [Dependency]
+        public IPaymentDetailsRepository PaymentDetails { get; set; }
 
         public int Complete()
         {

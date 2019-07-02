@@ -21,6 +21,7 @@ namespace WebApp.Persistence.UnitOfWork
         IPointPathLineRepository PointPathLines { get; set; }
         ISoldTicketRepository SoldTickets { get; set; }
         IUserRepository Users { get; set; }
+        IPaymentDetailsRepository PaymentDetails { get; set; }
 
         int Complete();
     }

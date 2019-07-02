@@ -23,12 +23,12 @@ export class TicketService {
     return this.http.get(`${this.api_route}/Coefficients`);
   }
 
-  public buyTicket(productTypeId: string): Observable<any>{
-    return this.http.post(`${this.api_route}/SoldTickets/Buy/${productTypeId}`,'');
+  public buyTicket(productTypeId: string, json: any): Observable<any>{
+    return this.http.post(`${this.api_route}/SoldTickets/Buy/${productTypeId}`, json, { "headers" : {'Content-type' : 'application/json'}});
   }
 
-  public buyTicketAnonymous(): Observable<any>{
-    return this.http.post(`${this.api_route}/SoldTickets/BuyAnonymous`,'');
+  public buyTicketAnonymous(json: any): Observable<any>{
+    return this.http.post(`${this.api_route}/SoldTickets/BuyAnonymous`, json, { "headers" : {'Content-type' : 'application/json'}});
   }
 
   public isTicketValid(id: string): Observable<any> {

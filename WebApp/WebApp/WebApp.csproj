@@ -272,6 +272,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\PaymentDetailsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\BusesController.cs" />
     <Compile Include="Controllers\BusStopsController.cs" />
@@ -290,9 +291,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\BusesPositionsHub.cs" />
-    <Compile Include="Migrations\201906060952033_InitialMigration.cs" />
-    <Compile Include="Migrations\201906060952033_InitialMigration.Designer.cs">
-      <DependentUpon>201906060952033_InitialMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201907021908163_FirstMigration.cs" />
+    <Compile Include="Migrations\201907021908163_FirstMigration.Designer.cs">
+      <DependentUpon>201907021908163_FirstMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Models\BusStopsOnLine.cs" />
     <Compile Include="Models\Coefficient.cs" />
     <Compile Include="Models\Line.cs" />
+    <Compile Include="Models\PaymentDetails.cs" />
     <Compile Include="Models\PointPathLine.cs" />
     <Compile Include="Models\PriceHistory.cs" />
     <Compile Include="Models\Pricelist.cs" />
@@ -319,6 +321,7 @@
     <Compile Include="Persistence\Repository\IBusStopsOnLineRepository.cs" />
     <Compile Include="Persistence\Repository\ICoefficientRepository.cs" />
     <Compile Include="Persistence\Repository\ILineRepository.cs" />
+    <Compile Include="Persistence\Repository\IPaymentDetailsRepository.cs" />
     <Compile Include="Persistence\Repository\IPointPathLineRepository.cs" />
     <Compile Include="Persistence\Repository\IPriceHistoryRepository.cs" />
     <Compile Include="Persistence\Repository\IPricelistRepository.cs" />
@@ -328,6 +331,7 @@
     <Compile Include="Persistence\Repository\ITimeTableRepository.cs" />
     <Compile Include="Persistence\Repository\IUserRepository.cs" />
     <Compile Include="Persistence\Repository\LineRepository.cs" />
+    <Compile Include="Persistence\Repository\PaymentDetailsRepository.cs" />
     <Compile Include="Persistence\Repository\PointPathLineRepository.cs" />
     <Compile Include="Persistence\Repository\PriceHistoryRepository.cs" />
     <Compile Include="Persistence\Repository\PricelistRepository.cs" />
@@ -436,8 +440,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201906060952033_InitialMigration.resx">
-      <DependentUpon>201906060952033_InitialMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201907021908163_FirstMigration.resx">
+      <DependentUpon>201907021908163_FirstMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

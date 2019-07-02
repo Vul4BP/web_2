@@ -20,5 +20,7 @@ namespace WebApp.Models
         public Double Price { get; set; }
         [Required]
         public DateTime DateOfPurchase { get; set; }
+        public string PaymentDetailsId { get; set; }
+        public PaymentDetails PaymentDetails { get; set; }
     }
 }

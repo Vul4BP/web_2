@@ -61,7 +61,7 @@
 
             if (!context.Users.Any(u => u.UserName == "appu@yahoo.com"))
             { 
-                var user = new ApplicationUser() { Id = "appu", UserName = "appu@yahoo.com", Email = "appu@yahoo.com", Name = "Mirjana", Surname = "Grumen", PasswordHash = ApplicationUser.HashPassword("Appu123!"), DateOfBirth = new DateTime(1997, 1, 2, 23, 22, 10) };
+                var user = new ApplicationUser() { Id = "appu", UserName = "appu@yahoo.com", Type="obican", Email = "appu@yahoo.com", Name = "Mirjana", Surname = "Grumen", PasswordHash = ApplicationUser.HashPassword("Appu123!"), DateOfBirth = new DateTime(1997, 1, 2, 23, 22, 10) };
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "AppUser");
             }
@@ -79,8 +79,8 @@
                 userManager.Create(user);
                 userManager.AddToRole(user.Id, "Controller");
             }
-
-            /*
+            
+            
             //empty database
             //Update-Database –TargetMigration: $InitialDatabase
             //redosled je kritican :D
@@ -134,7 +134,7 @@
             DodajPutanjeLinija(context);
 
             //DODAVANJE STAJALISTA
-            DodajAutobuskaStajalista(context);*/
+            DodajAutobuskaStajalista(context);
 
             //DODVANJE AUTOBUSA (svaka linija po 1)
             DodajAutobuse(context);
@@ -317,7 +317,7 @@
 
         private void DodajAutobuskaStajalista(WebApp.Persistence.ApplicationDbContext context) {
             //TODO: PROMENI PUTANJU DO FAJLA
-            string text = System.IO.File.ReadAllText(@"D:\My documents\GitHub\web_2\WebApp\WebApp\Migrations\busStops.csv");
+            string text = System.IO.File.ReadAllText(@"C:\Users\Stevko\Documents\GitHub\web_2\WebApp\WebApp\Migrations\busStops.csv");
             var redovi = text.Split('\n');
             for (int i = 0; i < redovi.Length; i++) {
                 if (redovi[i].Length < 5) {
@@ -354,7 +354,7 @@
 
         private void DodajPutanjeLinija(WebApp.Persistence.ApplicationDbContext context) {
             //TODO: PROMENI PUTANJU DO FAJLA
-            string text = System.IO.File.ReadAllText(@"D:\My documents\GitHub\web_2\WebApp\WebApp\Migrations\pathsCoords.csv");
+            string text = System.IO.File.ReadAllText(@"C:\Users\Stevko\Documents\GitHub\web_2\WebApp\WebApp\Migrations\pathsCoords.csv");
             var redovi = text.Split('\n');
             for (int i = 0; i < redovi.Length; i++) {
                 if (redovi[i].Length < 5)

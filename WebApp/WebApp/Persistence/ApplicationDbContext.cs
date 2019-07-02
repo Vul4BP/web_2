@@ -22,6 +22,7 @@ namespace WebApp.Persistence
         public DbSet<Coefficient> Coefficients { get; set; }
         public DbSet<SoldTicket> SoldTickets { get; set; }
         public DbSet<PointPathLine> PointPathLines { get; set; }
+        public DbSet<PaymentDetails> PaymentDetails { get; set; }
         //public DbSet<ApplicationUser> Userss { get; set; }
 
 

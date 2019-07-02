@@ -3,7 +3,7 @@ namespace WebApp.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialMigration : DbMigration
+    public partial class FirstMigration : DbMigration
     {
         public override void Up()
         {
@@ -80,6 +80,30 @@ namespace WebApp.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.PaymentDetails",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Cart = c.String(nullable: false),
+                        CreateTime = c.String(),
+                        Intent = c.String(),
+                        State = c.String(nullable: false),
+                        PayerName = c.String(),
+                        PayerSurname = c.String(),
+                        PayerId = c.String(nullable: false),
+                        PayerEmail = c.String(),
+                        AddressCountryCode = c.String(nullable: false),
+                        AddressCity = c.String(),
+                        AddressLine = c.String(),
+                        AddressPostalCode = c.String(nullable: false),
+                        ItemName = c.String(),
+                        ItemPrice = c.Double(nullable: false),
+                        ItemCurrency = c.String(nullable: false),
+                        CurrencyRate = c.Double(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.PriceHistories",
                 c => new
                     {
@@ -148,10 +172,13 @@ namespace WebApp.Migrations
                         Usages = c.Int(nullable: false),
                         Price = c.Double(nullable: false),
                         DateOfPurchase = c.DateTime(nullable: false),
+                        PaymentDetailsId = c.String(maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.PaymentDetails", t => t.PaymentDetailsId)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId);
+                .Index(t => t.UserId)
+                .Index(t => t.PaymentDetailsId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -229,6 +256,7 @@ namespace WebApp.Migrations
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.SoldTickets", "PaymentDetailsId", "dbo.PaymentDetails");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.PriceHistories", "ProductTypeId", "dbo.ProductTypes");
             DropForeignKey("dbo.PriceHistories", "PricelistId", "dbo.Pricelists");
@@ -240,6 +268,7 @@ namespace WebApp.Migrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropIndex("dbo.SoldTickets", new[] { "PaymentDetailsId" });
             DropIndex("dbo.SoldTickets", new[] { "UserId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
@@ -260,6 +289,7 @@ namespace WebApp.Migrations
             DropTable("dbo.ProductTypes");
             DropTable("dbo.Pricelists");
             DropTable("dbo.PriceHistories");
+            DropTable("dbo.PaymentDetails");
             DropTable("dbo.Coefficients");
             DropTable("dbo.PointPathLines");
             DropTable("dbo.BusStops");

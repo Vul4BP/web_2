@@ -3,7 +3,7 @@
   <mat-form-field class='tableFilter'>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
   </mat-form-field>
-  <div class="table-container height-400">
+  <div class="table-container height-300">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
       <ng-container matColumnDef="productTypeName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Tip karte </th>
