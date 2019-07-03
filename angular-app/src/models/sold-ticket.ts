@@ -1,5 +1,6 @@
 import { Guid } from "guid-typescript";
 import { User } from './user';
+import { PaymentDetails } from './payment-details';
 
 export class SoldTicket {
     public Id: Guid;
@@ -10,4 +11,5 @@ export class SoldTicket {
     public Usages: number;
     public Price: number;
     public DateOfPurchase: Date;
+    public PaymentDetails: PaymentDetails;
 }

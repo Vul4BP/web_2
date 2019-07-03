@@ -46,5 +46,25 @@
         <td><b>Važi do</b></td><td>{{ selectedTicket.Expires | date: 'dd/MM/yyyy HH:mm' }}</td>
       </tr>
     </table>
+    <mat-expansion-panel class="margin-bottom-10">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Transakcija
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ selectedTicket.PaymentDetails.Id }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div>
+        <p>id korpe: {{ selectedTicket.PaymentDetails.Cart }}</p>
+        <p>vreme: {{ selectedTicket.PaymentDetails.CreateTime }}</p>
+        <p>status: {{ selectedTicket.PaymentDetails.State }}</p>
+        <p>platilac: {{ selectedTicket.PaymentDetails.PayerName }} {{ selectedTicket.PaymentDetails.PayerSurname }}</p>
+        <p>email: {{ selectedTicket.PaymentDetails.PayerEmail }}</p>
+        <p>adresa: {{ selectedTicket.PaymentDetails.AddressLine }}, {{ selectedTicket.PaymentDetails.AddressCity}}, {{ selectedTicket.PaymentDetails.AddressCountryCode}}</p>
+        <p>karta: {{ selectedTicket.PaymentDetails.ItemName }}</p>
+        <p>uplacena svota: {{ selectedTicket.PaymentDetails.ItemPrice }} {{ selectedTicket.PaymentDetails.ItemCurrency }}</p>
+      </div>
+    </mat-expansion-panel>
   </div>
 </div>

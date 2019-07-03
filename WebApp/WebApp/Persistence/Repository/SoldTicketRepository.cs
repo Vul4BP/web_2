@@ -15,16 +15,16 @@ namespace WebApp.Persistence.Repository
 
         new public IEnumerable<SoldTicket> GetAll()
         {
-            return context.Set<SoldTicket>().Include("User").ToList();
+            return context.Set<SoldTicket>().Include("User").Include("PaymentDetails").ToList();
         }
 
         public IEnumerable<SoldTicket> GetAllWithoutUser() {
-            return context.Set<SoldTicket>().ToList();
+            return context.Set<SoldTicket>().Include("PaymentDetails").ToList();
         }
 
         new public SoldTicket Get(Guid id)
         {
-            return context.Set<SoldTicket>().Include("User").FirstOrDefault(x => x.Id == id);
+            return context.Set<SoldTicket>().Include("User").Include("PaymentDetails").FirstOrDefault(x => x.Id == id);
         }
     }
 }
